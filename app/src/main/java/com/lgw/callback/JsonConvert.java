@@ -15,17 +15,14 @@
  */
 package com.lgw.callback;
 
-import com.aofa.bracelet.model.LzyResponse;
-import com.aofa.bracelet.model.SimpleResponse;
 import com.google.gson.stream.JsonReader;
+import com.lgw.bean.LzyResponse;
+import com.lgw.bean.SimpleResponse;
 import com.lzy.okgo.convert.Converter;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
