@@ -34,7 +34,7 @@ android {
             buildConfigField "boolean", "logSwitch", "false"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-        debug{
+        debug {
             debuggable true
             signingConfig signingConfigs.debug
             buildConfigField "boolean", "logSwitch", "true"
