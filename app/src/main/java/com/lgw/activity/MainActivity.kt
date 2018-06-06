@@ -13,9 +13,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         sample_text.text = stringFromJNI()
 
-        tianqi.setOnClickListener({v->
+        tianqi.setOnClickListener{v->
             ActivityUtils.startActivity(WeatherActivity::class.java)
-        })
+        }
     }
 
     external fun stringFromJNI(): String
