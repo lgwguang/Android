@@ -55,5 +55,6 @@ public class BaseApplication extends Application {
                 .setRetryCount(0)
                 .addCommonHeaders(headers)
                 .addCommonParams(params);
+
     }
 }
