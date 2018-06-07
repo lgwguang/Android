@@ -2,12 +2,16 @@ package com.lgw.weather.model;
 
 import android.content.Context;
 
-import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.lgw.base.Constant;
+import com.lgw.bean.Weather;
+import com.lgw.callback.JsonCallback;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.model.Response;
 
 public class WeatherModelImpl implements WeatherModel {
 
@@ -32,7 +36,7 @@ public class WeatherModelImpl implements WeatherModel {
     public AMapLocationListener mLocationListener = aMapLocation -> {
         if (null != aMapLocation) {
             if (aMapLocation.getErrorCode() == 0) {
-                mLoadListener.OnSuccess(aMapLocation);
+                mLoadListener.OnSuccess(aMapLocation, 0);
                 mLocationClient.stopLocation();
                 onDestroy();
             } else {
@@ -44,7 +48,7 @@ public class WeatherModelImpl implements WeatherModel {
     };
 
     public interface OnLoadListener<T> {
-        void OnSuccess(AMapLocation mAMapLocation);
+        void OnSuccess(Object object, int type);
     }
 
     public void onDestroy() {
@@ -54,5 +58,18 @@ public class WeatherModelImpl implements WeatherModel {
             mLocationOption = null;
             LogUtils.d("mLocationClient 销毁了");
         }
+    }
+
+
+    public void getWeatherData(String adcode) {
+        OkGo.<Weather>get(Constant.GAODEWEATHERAPI)
+                .params("city", adcode)
+                .params("key", Constant.key)
+                .execute(new JsonCallback<Weather>() {
+                    @Override
+                    public void onSuccess(Response<Weather> response) {
+                        mLoadListener.OnSuccess(response.body(), 1);
+                    }
+                });
     }
 }
