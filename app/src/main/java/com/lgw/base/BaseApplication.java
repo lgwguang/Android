@@ -13,6 +13,7 @@ import com.lzy.okgo.cookie.store.SPCookieStore;
 import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
 import com.lzy.okgo.model.HttpHeaders;
 import com.lzy.okgo.model.HttpParams;
+import com.squareup.leakcanary.LeakCanary;
 
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -56,5 +57,12 @@ public class BaseApplication extends Application {
                 .addCommonHeaders(headers)
                 .addCommonParams(params);
 
+        //----------------------------------LeakCanary----------------------------------//
+        if (LeakCanary.isInAnalyzerProcess(getApplicationContext())) {
+            return;
+        }
+        LeakCanary.install(this);
+
     }
+
 }

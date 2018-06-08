@@ -12,9 +12,5 @@ public class BaseActivity extends CheckPermissionsActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (LeakCanary.isInAnalyzerProcess(getApplicationContext())) {
-            return;
-        }
-        LeakCanary.install((Application) getApplicationContext());
     }
 }

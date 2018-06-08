@@ -1,13 +1,10 @@
 package com.lgw.weather.presenter;
 
 import android.content.Context;
-
 import com.amap.api.location.AMapLocation;
 import com.lgw.bean.Weather;
-import com.lgw.weather.model.WeatherModel;
 import com.lgw.weather.model.WeatherModelImpl;
 import com.lgw.weather.view.WeatherView;
-import org.jetbrains.annotations.NotNull;
 
 
 public class WeatherPresenterImpl implements WeatherPresenter, WeatherModelImpl.OnLoadListener {
