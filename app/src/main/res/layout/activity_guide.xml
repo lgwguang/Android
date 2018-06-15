@@ -7,15 +7,19 @@
     android:orientation="vertical"
     tools:context=".activity.GuideActivity">
 
+
+
+
     <com.lgw.widget.ClearableEditText
+        android:id="@+id/et_textview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:drawable_clear="@drawable/ic_red_mission_get_delete">
 
     </com.lgw.widget.ClearableEditText>
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+
+
+
 
 </LinearLayout>
