@@ -1,7 +1,5 @@
 package com.lgw.weather;
 
-import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
@@ -10,23 +8,28 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.lgw.R;
 import com.lgw.base.BaseActivity;
 import com.lgw.bean.Weather;
-import com.lgw.callback.DialogCallback;
 import com.lgw.weather.presenter.WeatherPresenterImpl;
 import com.lgw.weather.view.WeatherView;
-import com.lzy.okgo.OkGo;
-import com.lzy.okgo.model.Response;
-import org.json.JSONObject;
 
 public class WeatherActivity extends BaseActivity implements WeatherView{
 
     TextView location;
     private WeatherPresenterImpl presenter;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_weather);
+    public int getContentView() {
+        return R.layout.activity_weather;
+    }
+
+    @Override
+    public void initView() {
         location = findViewById(R.id.tv_location);
         presenter = new WeatherPresenterImpl(getApplicationContext(),this);
+    }
+
+    @Override
+    public void initListener() {
+
     }
 
 

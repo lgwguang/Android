@@ -14,6 +14,7 @@ import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
 import com.lzy.okgo.model.HttpHeaders;
 import com.lzy.okgo.model.HttpParams;
 import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -62,7 +63,5 @@ public class BaseApplication extends Application {
             return;
         }
         LeakCanary.install(this);
-
     }
-
 }
