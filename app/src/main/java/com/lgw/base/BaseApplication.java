@@ -5,6 +5,7 @@ import android.app.Application;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
 import com.lgw.BuildConfig;
+import com.lgw.Utils.CrashHandler;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.cache.CacheMode;
@@ -14,7 +15,6 @@ import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
 import com.lzy.okgo.model.HttpHeaders;
 import com.lzy.okgo.model.HttpParams;
 import com.squareup.leakcanary.LeakCanary;
-import com.squareup.leakcanary.RefWatcher;
 
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -23,6 +23,11 @@ import okhttp3.OkHttpClient;
 
 
 public class BaseApplication extends Application {
+
+
+
+    public static final String a = "测试是";
+
 
     @Override
     public void onCreate() {
@@ -63,5 +68,7 @@ public class BaseApplication extends Application {
             return;
         }
         LeakCanary.install(this);
+
+        CrashHandler.getInstance().init(getApplicationContext());
     }
 }

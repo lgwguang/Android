@@ -51,7 +51,14 @@
 
         <service android:name="com.amap.api.location.APSService" />
 
-        <activity android:name=".activity.GuideActivity"></activity>
+        <activity android:name=".activity.GuideActivity" />
+        <activity
+            android:name=".activity.TestActivity"
+            android:label="@string/title_activity_test" />
+        <activity
+            android:name=".activity.ScrollingActivity"
+            android:label="@string/title_activity_scrolling"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
