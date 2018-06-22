@@ -2,7 +2,9 @@ package com.lgw.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
+import android.view.KeyEvent
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.ToastUtils
@@ -40,5 +42,24 @@ class MainActivity : AppCompatActivity() {
         init {
             System.loadLibrary("native-lib")
         }
+    }
+
+    private var time: Long = 0
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                drawerLayout.closeDrawer(GravityCompat.START)
+            } else {
+                if (System.currentTimeMillis() - time > 1000) {
+                    ToastUtil.showToast(this@MainActivity, "再按一次返回桌面")
+                    time = System.currentTimeMillis()
+                } else {
+                    moveTaskToBack(true)
+                }
+            }
+            return true
+        }
+        return super.onKeyDown(keyCode, event)
+
     }
 }
