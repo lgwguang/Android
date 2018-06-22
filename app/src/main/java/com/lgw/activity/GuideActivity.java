@@ -1,22 +1,18 @@
 package com.lgw.activity;
 
-import android.os.Handler;
+import android.view.KeyEvent;
+import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.lgw.R;
 import com.lgw.base.BaseActivity;
+import com.lgw.view.CountDownView;
 
-import java.util.Timer;
-import java.util.TimerTask;
+public class GuideActivity extends BaseActivity implements View.OnClickListener {
 
-public class GuideActivity extends BaseActivity {
-
-    TextView tv_countdown;
     ImageView iv_ad;
-
-    Handler mHandler;
-    Timer timer;
+    CountDownView cdvTime;
 
     @Override
     public int getContentView() {
@@ -25,13 +21,56 @@ public class GuideActivity extends BaseActivity {
 
     @Override
     public void initView() {
-        mHandler = new Handler();
-        timer = new Timer();
-        tv_countdown = findViewById(R.id.tv_countdown);
         iv_ad = findViewById(R.id.iv_ad);
+        cdvTime = findViewById(R.id.cdv_time);
+        Glide.with(this).load("https://b-ssl.duitang.com/uploads/item/201407/27/20140727021216_tPYdL.jpeg").into(iv_ad);
+        initCountDownView();
+    }
 
-        tv_countdown.setText("10秒");
-        TimerTask timerTask = new TimerTask() {
+    private void initCountDownView() {
+        cdvTime.setTime(15);
+        cdvTime.start();
+        cdvTime.setOnLoadingFinishListener(new CountDownView.OnLoadingFinishListener() {
+            @Override
+            public void finish() {
+                startActivity(MainActivity.class);
+                finish();
+            }
+        });
+    }
+
+    @Override
+    public void initListener() {
+        cdvTime.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        cdvTime.stop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (cdvTime != null && cdvTime.isShown()) {
+            cdvTime.stop();
+        }
+    }
+
+    /**
+     * 屏蔽返回键
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+                return true;
+            default:
+                break;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+     /*TimerTask timerTask = new TimerTask() {
             int timeout = 10;
             @Override
             public void run() {
@@ -43,24 +82,16 @@ public class GuideActivity extends BaseActivity {
                 }
                 timeout--;
                 mHandler.post(() -> {
-                    tv_countdown.setText(timeout + "秒");
                 });
             }
         };
-        timer.schedule(timerTask, 0, 1000);
-    }
+        timer.schedule(timerTask, 0, 1000);*/
 
-    @Override
-    public void initListener() {
-
-    }
-
-    private void stopTimer(Timer timer) {
+        /*private void stopTimer(Timer timer) {
         if (timer == null) {
             return;
         }
         timer.cancel();
         startActivity(MainActivity.class);
-    }
-
+    }*/
 }

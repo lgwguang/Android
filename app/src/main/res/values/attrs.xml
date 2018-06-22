@@ -1,11 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="ClearableEditText">
-        <attr name="drawable_clear" format="reference"/>
+        <attr name="drawable_clear" format="reference" />
     </declare-styleable>
     <declare-styleable name="SettingItemView">
-        <attr name="setting_title" format="string"/>
-        <attr name="desc_on" format="string"/>
-        <attr name="desc_off" format="string"/>
+        <attr name="setting_title" format="string" />
+        <attr name="desc_on" format="string" />
+        <attr name="desc_off" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="CountDownView">
+        <attr name="cd_circle_radius" format="dimension" />
+        <attr name="cd_arc_width" format="dimension" />
+        <attr name="cd_arc_color" format="color" />
+        <attr name="cd_bg_color" format="color" />
+        <attr name="cd_text_color" format="color" />
+        <attr name="cd_text_size" format="dimension" />
+        <attr name="cd_animator_time" format="integer" />
+        <attr name="cd_animator_time_unit" format="string" />
+        <attr name="cd_retreat_type" format="enum">
+
+            <enum name="forward" value="1" />
+
+            <enum name="back" value="2" />
+        </attr>
+        <attr name="cd_location" format="enum">
+            <enum name="left" value="1" />
+            <enum name="top" value="2" />
+            <enum name="right" value="3" />
+            <enum name="bottom" value="4" />
+        </attr>
     </declare-styleable>
 </resources>
