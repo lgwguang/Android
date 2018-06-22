@@ -1,9 +1,11 @@
 package com.lgw.activity;
 
+import android.content.Intent;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.bumptech.glide.Glide;
 import com.lgw.R;
 import com.lgw.base.BaseActivity;
@@ -28,13 +30,15 @@ public class GuideActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void initCountDownView() {
-        cdvTime.setTime(15);
+        cdvTime.setTime(5);
         cdvTime.start();
         cdvTime.setOnLoadingFinishListener(new CountDownView.OnLoadingFinishListener() {
             @Override
             public void finish() {
-                startActivity(MainActivity.class);
-                finish();
+                LogUtils.d("======进入主页面======");
+                Intent intent = new Intent(mContext, MainActivity.class);
+                startActivity(intent);
+                GuideActivity.this.finish();
             }
         });
     }
@@ -47,6 +51,7 @@ public class GuideActivity extends BaseActivity implements View.OnClickListener 
     @Override
     public void onClick(View v) {
         cdvTime.stop();
+        finish();
     }
 
     @Override
@@ -65,8 +70,6 @@ public class GuideActivity extends BaseActivity implements View.OnClickListener 
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
                 return true;
-            default:
-                break;
         }
         return super.onKeyDown(keyCode, event);
     }
