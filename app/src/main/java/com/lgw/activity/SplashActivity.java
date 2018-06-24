@@ -42,7 +42,7 @@ public class SplashActivity extends BaseActivity {
     @Override
     public void initListener() {
         btnGo.setOnClickListener(v -> {
-            startActivity(GuideActivity.class);
+            startActivity(NewMainActivity.class);
             SPUtils.getInstance(Constant.SP_NAME).put(Constant.KEY_FIRST_SPLASH, false);
             finish();
         });
