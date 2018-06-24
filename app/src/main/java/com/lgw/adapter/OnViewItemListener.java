@@ -2,6 +2,6 @@ package com.lgw.adapter;
 
 public interface OnViewItemListener<T> {
 
-    void viewItemClick(int position, T t);
+    void viewItemClick(int position, T  t);
 
 }

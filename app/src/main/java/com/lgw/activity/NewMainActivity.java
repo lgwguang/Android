@@ -60,6 +60,18 @@ public class NewMainActivity extends BaseActivity {
                     }
                 }
             });
+
+
+//            new OnViewItemListener() {
+//                @Override
+//                public void viewItemClick(int position, Object o) {
+//                    switch (position) {
+//                        case 0:
+//                            showEditDialog();
+//                            break;
+//                    }
+//                }
+//            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
