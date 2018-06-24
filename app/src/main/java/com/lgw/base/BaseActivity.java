@@ -1,6 +1,7 @@
 package com.lgw.base;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -13,6 +14,7 @@ import com.blankj.utilcode.util.ToastUtils;
 public abstract class BaseActivity extends CheckPermissionsActivity {
 
     protected Context mContext;
+    protected Activity mActivity;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -22,6 +24,7 @@ public abstract class BaseActivity extends CheckPermissionsActivity {
         //避免切换横竖屏
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         mContext = getApplicationContext();
+        mActivity = this;
         initView();
         initListener();
         initData();

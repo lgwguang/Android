@@ -46,8 +46,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MainActivity"
-            android:launchMode="singleTask"/>
+        <activity
+            android:name=".activity.MainActivity"
+            android:launchMode="singleTask" />
         <activity android:name=".weather.WeatherActivity" />
 
         <service android:name="com.amap.api.location.APSService" />
@@ -59,7 +60,8 @@
         <activity
             android:name=".activity.ScrollingActivity"
             android:label="@string/title_activity_scrolling"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activity.NewMainActivity"></activity>
     </application>
 
 </manifest>

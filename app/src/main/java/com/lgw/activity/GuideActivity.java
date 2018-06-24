@@ -36,7 +36,7 @@ public class GuideActivity extends BaseActivity implements View.OnClickListener 
             @Override
             public void finish() {
                 LogUtils.d("======进入主页面======");
-                Intent intent = new Intent(mContext, MainActivity.class);
+                Intent intent = new Intent(mContext, NewMainActivity.class);
                 startActivity(intent);
                 GuideActivity.this.finish();
             }

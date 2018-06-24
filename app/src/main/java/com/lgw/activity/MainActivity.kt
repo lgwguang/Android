@@ -47,16 +47,17 @@ class MainActivity : AppCompatActivity() {
     private var time: Long = 0
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            if (System.currentTimeMillis() - time > 1000) {
+                ToastUtils.showShort("再按一次返回桌面")
+                time = System.currentTimeMillis()
+            } else {
+                moveTaskToBack(true)
+            }
+            /*if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
                 drawerLayout.closeDrawer(GravityCompat.START)
             } else {
-                if (System.currentTimeMillis() - time > 1000) {
-                    ToastUtil.showToast(this@MainActivity, "再按一次返回桌面")
-                    time = System.currentTimeMillis()
-                } else {
-                    moveTaskToBack(true)
-                }
-            }
+
+            }*/
             return true
         }
         return super.onKeyDown(keyCode, event)
