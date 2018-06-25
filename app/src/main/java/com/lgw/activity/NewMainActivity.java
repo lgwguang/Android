@@ -73,9 +73,9 @@ public class NewMainActivity extends BaseActivity {
 
     }
 
-    AlertDialog dialog = null;
+
     private void showEditDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+        final AlertDialog dialog = new AlertDialog.Builder(mActivity).create();
         View view = View.inflate(mContext,R.layout.dialog_edit,null);
         TextView text1 = view.findViewById(R.id.et_text2);
         Button ok = view.findViewById(R.id.btn_ok);
@@ -87,8 +87,8 @@ public class NewMainActivity extends BaseActivity {
         cancel.setOnClickListener(v -> {
             dialog.dismiss();
         });
-        builder.setView(view);
-        dialog = builder.show();
+        dialog.setView(view,0,0,0,0);
+        dialog.show();
     }
 
     @Override
