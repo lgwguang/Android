@@ -2,7 +2,6 @@ package com.lgw.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.KeyEvent
 import com.blankj.utilcode.util.ActivityUtils
@@ -21,10 +20,10 @@ class MainActivity : AppCompatActivity() {
         LogUtils.d("主页面")
         sample_text.text = stringFromJNI()
 
-        tianqi.setOnClickListener{v->
+        tianqi.setOnClickListener{
             ActivityUtils.startActivity(WeatherActivity::class.java)
         }
-        btn_scroll.setOnClickListener{v ->
+        btn_scroll.setOnClickListener{
             startActivity(Intent(this,ScrollingActivity::class.java))
         }
 

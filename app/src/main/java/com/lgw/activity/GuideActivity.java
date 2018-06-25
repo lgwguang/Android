@@ -32,14 +32,11 @@ public class GuideActivity extends BaseActivity implements View.OnClickListener 
     private void initCountDownView() {
         cdvTime.setTime(5);
         cdvTime.start();
-        cdvTime.setOnLoadingFinishListener(new CountDownView.OnLoadingFinishListener() {
-            @Override
-            public void finish() {
-                LogUtils.d("======进入主页面======");
-                Intent intent = new Intent(mContext, NewMainActivity.class);
-                startActivity(intent);
-                GuideActivity.this.finish();
-            }
+        cdvTime.setOnLoadingFinishListener(() -> {
+            LogUtils.d("======进入主页面======");
+            Intent intent = new Intent(mContext, NewMainActivity.class);
+            startActivity(intent);
+            GuideActivity.this.finish();
         });
     }
 
