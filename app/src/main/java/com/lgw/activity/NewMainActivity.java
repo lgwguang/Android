@@ -6,16 +6,17 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ResourceUtils;
+import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lgw.R;
-import com.lgw.adapter.HomeAdapter;
-import com.lgw.adapter.OnViewItemListener;
+import com.lgw.Utils.Base64Util;
+import com.lgw.Utils.DESUtils;
+import com.lgw.adapter.MenuAdapter;
 import com.lgw.base.BaseActivity;
-import com.lgw.bean.Home;
+import com.lgw.bean.MenuItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,44 +36,49 @@ public class NewMainActivity extends BaseActivity {
     @Override
     public void initView() {
         gv = findViewById(R.id.gv);
-        String menu = ResourceUtils.readAssets2String("menudata01.json","UTF-8");
-        LogUtils.d(menu);
+        String menu = ResourceUtils.readAssets2String("menudata.json","UTF-8");
         try {
             JSONObject jsonObject = new JSONObject(menu);
             JSONArray jsonArray = jsonObject.optJSONArray("HomeDisplayList");
             Gson gson = new Gson();
-            ArrayList<Home> listData = gson.fromJson(jsonArray.toString(), new TypeToken<ArrayList<Home>>() {
+            ArrayList<MenuItem> listData = gson.fromJson(jsonArray.toString(), new TypeToken<ArrayList<MenuItem>>() {
             }.getType());
-            HomeAdapter homeAdapter = new HomeAdapter(mContext,listData);
+            MenuAdapter homeAdapter = new MenuAdapter(mContext,listData);
             gv.setAdapter(homeAdapter);
-            homeAdapter.setGridViewItemListener(new OnViewItemListener() {
-                @Override
-                public void viewItemClick(int position, Object o) {
-                    switch (position) {
-                        case 0:
-                            showEditDialog();
-                            break;
-                    }
+            homeAdapter.setGridViewItemListener((position, o) -> {
+                switch (position) {
+                    case 0:
+                        showEditDialog();
+                        break;
+                    case 1:
+                        EncryptionTest();
+                        break;
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                        sessionInterface.isFragOrAty((MenuItem) o);
+                        break;
                 }
             });
-
-
-//            new OnViewItemListener() {
-//                @Override
-//                public void viewItemClick(int position, Object o) {
-//                    switch (position) {
-//                        case 0:
-//                            showEditDialog();
-//                            break;
-//                    }
-//                }
-//            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
     }
+    private void EncryptionTest(){
+        String str = "北京你好123";
+        String encrypt = DESUtils.getInstance().setKEY(DESUtils.KEY_Default).encrypt(str);
+        SPUtils.getInstance().put("DESE",encrypt);
+        String decrypt = DESUtils.getInstance().setKEY(DESUtils.KEY_Default).decrypt(encrypt);
+        SPUtils.getInstance().put("DESD",decrypt);
 
+        String encodeStr = Base64Util.base64EncodeStr(str);
+        SPUtils.getInstance().put("Base64E",encodeStr);
+        String decodedStr = Base64Util.base64DecodedStr(encodeStr);
+        SPUtils.getInstance().put("Base64D",decodedStr);
+        ToastUtils.showShort("=====");
+    }
 
     private void showEditDialog() {
         final AlertDialog dialog = new AlertDialog.Builder(mActivity).create();

@@ -7,13 +7,20 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.blankj.utilcode.util.ResourceUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.lgw.R;
 import com.lgw.adapter.GuideViewPagerAdapter;
 import com.lgw.api.Constant;
 import com.lgw.base.BaseActivity;
+import com.lgw.base.BaseApplication;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SplashActivity extends BaseActivity {
 
@@ -30,6 +37,7 @@ public class SplashActivity extends BaseActivity {
     public void initView() {
         vpPager = findViewById(R.id.vp_pager);
         btnGo = findViewById(R.id.btn_go);
+        initAuthority();
         if (SPUtils.getInstance(Constant.SP_NAME).getBoolean(Constant.KEY_FIRST_SPLASH, true)) {
             initSplashView();
             initSplashListener();
@@ -37,6 +45,26 @@ public class SplashActivity extends BaseActivity {
             startActivity(GuideActivity.class);
             finish();
         }
+    }
+
+    private void initAuthority() {
+        String menu = ResourceUtils.readAssets2String("menudata.json","UTF-8");
+        try {
+            JSONObject jsonObject = new JSONObject(menu);
+            JSONArray jsonArray = jsonObject.optJSONArray("AuthorityList");
+            if (jsonArray != null) {
+                HashMap<String, String> AuthorityMap = new HashMap<>();
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject obj = jsonArray.optJSONObject(i);
+                    AuthorityMap.put(obj.optString("ActionId"),
+                            obj.optString("ActionId"));
+                }
+                BaseApplication.AuthorityList = AuthorityMap;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override

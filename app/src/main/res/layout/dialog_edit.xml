@@ -33,6 +33,7 @@
         android:layout_marginLeft="3dp"
         android:layout_marginRight="3dp"
         android:layout_marginTop="10dp"
+        android:textColor="#000000"
         app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
 
@@ -41,7 +42,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="3dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="4dp"
         android:background="@drawable/btn_select"
         android:text="确定"
         android:textColor="@color/chuck_colorPrimary"

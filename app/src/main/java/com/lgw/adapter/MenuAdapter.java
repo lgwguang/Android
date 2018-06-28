@@ -4,22 +4,23 @@ import android.content.Context;
 
 import com.lgw.R;
 import com.lgw.Utils.Util;
-import com.lgw.bean.Home;
+import com.lgw.bean.MenuItem;
 import com.lgw.bean.ViewHolder;
+
 import java.util.List;
 
-public class HomeAdapter extends CommonAdapter<Home> {
+public class MenuAdapter extends CommonAdapter<MenuItem> {
 
-    public HomeAdapter(Context context, List<Home> mDatas) {
+    public MenuAdapter(Context context, List<MenuItem> mDatas) {
         this(context, mDatas, R.layout.item_home);
     }
 
-    public HomeAdapter(Context context, List<Home> mDatas, int itemLayoutId) {
+    public MenuAdapter(Context context, List<MenuItem> mDatas, int itemLayoutId) {
         super(context, mDatas, itemLayoutId);
     }
 
     @Override
-    public void convert(ViewHolder holder, Home item) {
+    public void convert(ViewHolder holder, MenuItem item) {
         holder.setText(R.id.tv_function,item.getActionName());
         holder.setImageResource(R.id.iv_icon, Util.getResId(item.getActionImage(),R.drawable.class));
         holder.getView(R.id.ll_item).setOnClickListener(v -> {

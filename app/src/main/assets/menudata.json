@@ -1,5 +1,105 @@
 {
+    "AuthorityList": [
+        {
+            "ActionId": "20100"
+        },
+        {
+            "ActionId": "20102"
+        },
+        {
+            "ActionId": "20103"
+        }
+    ],
     "HomeDisplayList": [
+        {
+            "ActionId": "20100",
+            "ActionImage": "gnsm",
+            "ActionName": "弹框",
+            "ActionUrl": "com.lgw.activity.NewMainActivity",
+            "Clickable": "true",
+            "DisplayType": "list",
+            "EntryType": "activity",
+            "Params": "",
+            "Usable": "1"
+        },
+        {
+            "ActionId": "20101",
+            "ActionImage": "lift_alipay",
+            "ActionName": "加解密",
+            "ActionUrl": "",
+            "Clickable": "true",
+            "DisplayType": "list",
+            "EntryType": "activity",
+            "Params": "",
+            "Usable": "1"
+        },
+        {
+            "ActionId": "20102",
+            "ActionImage": "udgl",
+            "ActionName": "北京2",
+            "ActionUrl": "com.lgw.activity.MainActivity",
+            "Clickable": "true",
+            "DisplayType": "list",
+            "EntryType": "activity",
+            "Params": "",
+            "Usable": "1"
+        },
+        {
+            "ActionId": "20103",
+            "ActionImage": "wddt",
+            "ActionName": "北京3",
+            "ActionUrl": "com.lgw.activity.TestActivity",
+            "Clickable": "true",
+            "DisplayType": "icon",
+            "EntryType": "frag",
+            "Params": "",
+            "Usable": "1"
+        },
+        {
+            "ActionId": "20104",
+            "ActionImage": "zxzc",
+            "ActionName": "贷款",
+            "ActionUrl": "",
+            "Clickable": "true",
+            "DisplayType": "icon",
+            "EntryType": "activity",
+            "Params": "",
+            "Usable": "1"
+        },
+        {
+            "ActionId": "20105",
+            "ActionImage": "yhzx",
+            "ActionName": "积分",
+            "ActionUrl": "",
+            "Clickable": "true",
+            "DisplayType": "icon",
+            "EntryType": "activity",
+            "Params": "",
+            "Usable": "1"
+        },
+        {
+            "ActionId": "20106",
+            "ActionImage": "khfw",
+            "ActionName": "商城",
+            "ActionUrl": "",
+            "Clickable": "true",
+            "DisplayType": "icon",
+            "EntryType": "native",
+            "Params": "",
+            "Usable": "1",
+            "isNew": "no"
+        },
+        {
+            "ActionId": "20107",
+            "ActionImage": "wxjr",
+            "ActionName": "全部应用",
+            "ActionUrl": "",
+            "Clickable": "true",
+            "DisplayType": "icon",
+            "EntryType": "native",
+            "Params": "",
+            "Usable": "1"
+        },
         {
             "ActionId": "20100",
             "ActionImage": "gnsm",

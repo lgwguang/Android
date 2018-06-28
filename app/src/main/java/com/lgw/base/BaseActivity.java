@@ -10,12 +10,13 @@ import android.support.annotation.Nullable;
 
 import com.blankj.utilcode.util.NetworkUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.lgw.session.SessionInterface;
 
 public abstract class BaseActivity extends CheckPermissionsActivity {
 
     protected Context mContext;
     protected Activity mActivity;
-
+    public SessionInterface sessionInterface;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +32,7 @@ public abstract class BaseActivity extends CheckPermissionsActivity {
         if(!NetworkUtils.isConnected()){
             ToastUtils.showShort("请检查网络是否连接");
         }
+        sessionInterface = sessionInterface==null?new SessionInterface(this):sessionInterface;
     }
 
 

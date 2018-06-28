@@ -3,7 +3,6 @@ package com.lgw.activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.view.KeyEvent
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.ToastUtils
@@ -43,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private var time: Long = 0
+    /*private var time: Long = 0
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (System.currentTimeMillis() - time > 1000) {
@@ -52,14 +51,14 @@ class MainActivity : AppCompatActivity() {
             } else {
                 moveTaskToBack(true)
             }
-            /*if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            *//*if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
                 drawerLayout.closeDrawer(GravityCompat.START)
             } else {
 
-            }*/
+            }*//*
             return true
         }
         return super.onKeyDown(keyCode, event)
 
-    }
+    }*/
 }

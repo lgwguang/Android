@@ -16,6 +16,7 @@ import com.lzy.okgo.model.HttpHeaders;
 import com.lzy.okgo.model.HttpParams;
 import com.squareup.leakcanary.LeakCanary;
 
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
@@ -24,11 +25,9 @@ import okhttp3.OkHttpClient;
 
 public class BaseApplication extends Application {
 
-
-
     public static final String a = "测试是";
-
-
+    public static HashMap<String, String> AuthorityList = new HashMap<>();
+    public static boolean isLogin = false;
     @Override
     public void onCreate() {
         super.onCreate();
