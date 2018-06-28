@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 
 import com.blankj.utilcode.util.ToastUtils;
+import com.lgw.activity.LoginActivity;
 import com.lgw.base.BaseApplication;
 import com.lgw.bean.MenuItem;
 
@@ -51,6 +52,7 @@ public class SessionInterface {
             isClickMenu = true;
             menuParams = item;
             ToastUtils.showShort("请登录");
+            activity.startActivity(new Intent(activity, LoginActivity.class));
             return;
         }
         try {

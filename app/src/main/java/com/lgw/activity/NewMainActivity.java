@@ -16,7 +16,9 @@ import com.lgw.Utils.Base64Util;
 import com.lgw.Utils.DESUtils;
 import com.lgw.adapter.MenuAdapter;
 import com.lgw.base.BaseActivity;
+import com.lgw.base.BaseApplication;
 import com.lgw.bean.MenuItem;
+import com.lgw.session.SessionInterface;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,7 +58,7 @@ public class NewMainActivity extends BaseActivity {
                     case 2:
                     case 3:
                     case 4:
-                    case 5:
+                    case Integer.MAX_VALUE:
                         sessionInterface.isFragOrAty((MenuItem) o);
                         break;
                 }
@@ -100,5 +102,16 @@ public class NewMainActivity extends BaseActivity {
     @Override
     public void initListener() {
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(BaseApplication.isLogin){
+            if(SessionInterface.menuParams!=null){
+                sessionInterface.isFragOrAty(SessionInterface.menuParams);
+                SessionInterface.menuParams = null;
+            }
+        }
     }
 }

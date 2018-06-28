@@ -24,6 +24,11 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:name=".base.BaseApplication"
         android:allowBackup="true"
@@ -61,7 +66,10 @@
             android:name=".activity.ScrollingActivity"
             android:label="@string/title_activity_scrolling"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.NewMainActivity"/>
+        <activity android:name=".activity.NewMainActivity" />
+        <activity
+            android:name=".activity.LoginActivity"
+            android:label="@string/title_activity_login"></activity>
     </application>
 
 </manifest>
