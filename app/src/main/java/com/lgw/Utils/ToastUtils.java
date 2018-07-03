@@ -10,6 +10,8 @@ public final class ToastUtils {
     }
 
     public static void showToast(Activity activity, String msg) {
+
+
         if ("main".equals(Thread.currentThread().getName())) {
             Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
         } else {

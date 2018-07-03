@@ -13,6 +13,8 @@ import com.lgw.callback.JsonCallback;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.model.Response;
 
+import org.json.JSONObject;
+
 public class WeatherModelImpl implements WeatherModel {
 
     public AMapLocationClient mLocationClient = null;
@@ -62,12 +64,12 @@ public class WeatherModelImpl implements WeatherModel {
 
 
     public void getWeatherData(String adcode) {
-        OkGo.<Weather>get(Constant.GAODEWEATHERAPI)
+        OkGo.<JSONObject>get(Constant.GAODEWEATHERAPI)
                 .params("city", adcode)
                 .params("key", Constant.key)
-                .execute(new JsonCallback<Weather>() {
+                .execute(new JsonCallback<JSONObject>(Weather.class) {
                     @Override
-                    public void onSuccess(Response<Weather> response) {
+                    public void onSuccess(Response<JSONObject> response) {
                         mLoadListener.OnSuccess(response.body(), 1);
                     }
                 });

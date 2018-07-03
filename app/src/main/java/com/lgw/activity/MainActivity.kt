@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this,ScrollingActivity::class.java))
         }
 
-
+        ToastUtils.showShort("再按一次返回桌面")
         siv.isChecked = true
     }
 

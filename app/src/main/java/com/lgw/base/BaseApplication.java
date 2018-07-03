@@ -2,6 +2,7 @@ package com.lgw.base;
 
 import android.app.Application;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
 import com.lgw.BuildConfig;
@@ -28,6 +29,7 @@ public class BaseApplication extends Application {
     public static final String a = "测试是";
     public static HashMap<String, String> AuthorityList = new HashMap<>();
     public static boolean isLogin = false;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -61,7 +63,12 @@ public class BaseApplication extends Application {
                 .setRetryCount(0)
                 .addCommonHeaders(headers)
                 .addCommonParams(params);
-
+        //----------------------------------ARouter----------------------------------//
+        if (BuildConfig.DEBUG) {
+            ARouter.openLog();
+            ARouter.openDebug();
+        }
+        ARouter.init(this);
         //----------------------------------LeakCanary----------------------------------//
         if (LeakCanary.isInAnalyzerProcess(getApplicationContext())) {
             return;
