@@ -40,7 +40,7 @@ public class BaseApplication extends Application {
         //----------------------------------工具集合----------------------------------//
         Utils.init(this);
         //----------------------------------日志控制----------------------------------//
-        LogUtils.getConfig().setLogSwitch(BuildConfig.logSwitch)
+        LogUtils.getConfig().setLogSwitch(BuildConfig.logSwitch).setLogHeadSwitch(false)
                 .setBorderSwitch(false).setGlobalTag("日志");
         //----------------------------------网络请求----------------------------------//
         HttpHeaders headers = new HttpHeaders();

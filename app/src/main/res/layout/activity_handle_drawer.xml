@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activity.HandleDrawerActivity">
+    android:layout_height="match_parent">
+
     <!--内部的布局需要按照1、2、3的顺序，3嵌套4、5布局的结构来布局-->
     <com.lgw.widget.HandleDrawerLayout
         android:id="@+id/hdl_layout"
@@ -31,6 +30,13 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="horizontal">
+            <!--4 侧滑菜单布局-->
+            <FrameLayout
+                android:id="@+id/hdl_menu_view"
+                android:layout_width="245dp"
+                android:layout_height="match_parent"
+                android:background="#2d3144">
+            </FrameLayout>
             <!--5 侧滑手柄布局-->
             <RelativeLayout
                 android:id="@+id/hdl_handle_view"
@@ -50,13 +56,6 @@
                     android:text="我是手柄"
                     android:layout_gravity="center_vertical" />
             </RelativeLayout>
-            <!--4 侧滑菜单布局-->
-            <FrameLayout
-                android:id="@+id/hdl_menu_view"
-                android:layout_width="245dp"
-                android:layout_height="match_parent"
-                android:background="#2d3144">
-            </FrameLayout>
         </LinearLayout>
     </com.lgw.widget.HandleDrawerLayout>
 

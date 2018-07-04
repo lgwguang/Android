@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.ScreenUtils;
 
 /**
  * ================================
@@ -47,11 +46,10 @@ public class HandleDrawerLayout extends ViewGroup {
                 // 限定child横向的坐标范围：
                 // 参数left是child想要移动到left位置（仅仅是想移动，但还没移动）
                 // 如果不想child在X轴上被移动，返回0
-                LogUtils.e("left的值 :"+left +"dx的值："+dx);
                 if(child == mDrawerGroup){
                     // 这里代表-mMenuView.getMeasuredWidth() <= left <= 0
                     // 即child的横向坐标只能在这个范围内
-                    LogUtils.d("结果值："+Math.max(-mMenuView.getMeasuredWidth(), Math.min(left, 0)));
+                    LogUtils.d("即child的横向坐标只能在这个范围内:"+Math.max(-mMenuView.getMeasuredWidth(), Math.min(left, 0)));
                     return Math.max(-mMenuView.getMeasuredWidth(), Math.min(left, 0));
                 }
                 return 0;
@@ -80,9 +78,7 @@ public class HandleDrawerLayout extends ViewGroup {
                     int menuViewWidth = mMenuView.getWidth();
                     float offset = (menuViewWidth + releasedChild.getLeft()) * 1.0f / menuViewWidth;
                     // 设置释放后的view慢慢移动到指定位置
-                    LogUtils.i("设置释放后的view慢慢移动到指定位置  左边："+(xvel > 0 || xvel == 0 && offset > 0.5f ? 0 : -menuViewWidth+"上边"+ releasedChild.getTop()));
-                    //mHelper.settleCapturedViewAt(xvel > 0 || xvel == 0 && offset > 0.5f ? 0 : -menuViewWidth, releasedChild.getTop());
-                    mHelper.settleCapturedViewAt(xvel > 0 || xvel == 0 && offset > 0.5f ? 0 : ScreenUtils.getScreenWidth()+menuViewWidth, releasedChild.getTop());
+                    mHelper.settleCapturedViewAt(xvel > 0 || xvel == 0 && offset > 0.5f ? 0 : -menuViewWidth, releasedChild.getTop());
                     // 要调用invalidate()才会开始移动
                     invalidate();
                 }
@@ -111,12 +107,11 @@ public class HandleDrawerLayout extends ViewGroup {
             @Override
             public int getViewHorizontalDragRange(View child) {
                 //指定child横向可拖拽的范围
-                LogUtils.d("指定child横向可拖拽的范围:"+(child == mDrawerGroup ? mMenuView.getWidth() : 0));
                 return child == mDrawerGroup ? mMenuView.getWidth() : 0;
             }
         });
         // 设置左边缘检测，即从屏幕左边划进屏幕时，会回调onEdgeDragStarted
-        mHelper.setEdgeTrackingEnabled(ViewDragHelper.EDGE_RIGHT);
+        mHelper.setEdgeTrackingEnabled(ViewDragHelper.EDGE_LEFT);
     }
 
     @Override
@@ -130,8 +125,8 @@ public class HandleDrawerLayout extends ViewGroup {
         mContentView = getChildAt(0);
         mScrimView = getChildAt(1);
         mDrawerGroup = (ViewGroup) getChildAt(2);
-        mMenuView = mDrawerGroup.getChildAt(1);
-        mHandleView = mDrawerGroup.getChildAt(0);
+        mMenuView = mDrawerGroup.getChildAt(0);
+        mHandleView = mDrawerGroup.getChildAt(1);
 
         MarginLayoutParams lp = (MarginLayoutParams) mContentView.getLayoutParams();
         int contentWidthSpec = MeasureSpec.makeMeasureSpec(
@@ -176,12 +171,8 @@ public class HandleDrawerLayout extends ViewGroup {
         }else{
             groupLeft = mDrawerGroup.getLeft();
         }
-       /* mDrawerGroup.layout(- groupLeft, lp.topMargin,
+        mDrawerGroup.layout(groupLeft, lp.topMargin,
                 groupLeft + mDrawerGroup.getMeasuredWidth(),
-                lp.topMargin + mDrawerGroup.getMeasuredHeight());*/
-
-        mDrawerGroup.layout(ScreenUtils.getScreenWidth(), lp.topMargin,
-                ScreenUtils.getScreenWidth()+groupLeft + mDrawerGroup.getMeasuredWidth(),
                 lp.topMargin + mDrawerGroup.getMeasuredHeight());
 
         initScrimView();
@@ -213,7 +204,7 @@ public class HandleDrawerLayout extends ViewGroup {
         if(mFirstLayout && mScrimView != null){
             mScrimView.setAlpha(mOpenPercent);
             if(floatCompare(mOpenPercent, 0f)){
-                mScrimView.setVisibility(VISIBLE);
+                mScrimView.setVisibility(GONE);
             }else{
                 mScrimView.setVisibility(VISIBLE);
             }
@@ -288,9 +279,7 @@ public class HandleDrawerLayout extends ViewGroup {
      */
     public void openDrawer() {
         mOpenPercent = 1.0f;
-//        mHelper.smoothSlideViewTo(mDrawerGroup, 0, mDrawerGroup.getTop());
-        mHelper.smoothSlideViewTo(mDrawerGroup,ScreenUtils.getScreenWidth(), mDrawerGroup.getTop());
-        LogUtils.d("smoothSlideViewTo :"+mDrawerGroup.getTop());
+        mHelper.smoothSlideViewTo(mDrawerGroup, 0, mDrawerGroup.getTop());
         invalidate();
     }
     /**
@@ -298,9 +287,7 @@ public class HandleDrawerLayout extends ViewGroup {
      */
     public void closeDrawer() {
         mOpenPercent = 0.0f;
-        //mHelper.smoothSlideViewTo(mDrawerGroup, -mMenuView.getWidth(), mDrawerGroup.getTop());
-        mHelper.smoothSlideViewTo(mDrawerGroup, ScreenUtils.getScreenWidth()+mMenuView.getWidth(), mDrawerGroup.getTop());
-        LogUtils.d("smoothSlideViewTo :"+mMenuView.getWidth() +"::"+mDrawerGroup.getTop());
+        mHelper.smoothSlideViewTo(mDrawerGroup, -mMenuView.getWidth(), mDrawerGroup.getTop());
         invalidate();
     }
     private OnDrawerListener mDrawerListener = null;
@@ -318,5 +305,4 @@ public class HandleDrawerLayout extends ViewGroup {
          */
         void onDrawer(float percent);
     }
-
 }
