@@ -3,10 +3,10 @@ package com.lgw.widget;
 import android.content.Context;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.blankj.utilcode.util.LogUtils;
 
 /**
@@ -37,20 +37,44 @@ public class HandleDrawerLayout extends ViewGroup {
     private boolean mInLayout = false;
     private boolean mFirstLayout = true;
 
+    int widthPixels, heightPixels;
+
     public HandleDrawerLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        int widthPixels = displayMetrics.widthPixels;
+        int heightPixels = displayMetrics.heightPixels;
         mHelper = ViewDragHelper.create(this, 1.0f, new ViewDragHelper.Callback() {
             @Override
             public int clampViewPositionHorizontal(View child, int left, int dx) {
                 // 限定child横向的坐标范围：
                 // 参数left是child想要移动到left位置（仅仅是想移动，但还没移动）
                 // 如果不想child在X轴上被移动，返回0
+                LogUtils.e("left:"+left +"dx:"+dx);
                 if(child == mDrawerGroup){
                     // 这里代表-mMenuView.getMeasuredWidth() <= left <= 0
                     // 即child的横向坐标只能在这个范围内
-                    LogUtils.d("即child的横向坐标只能在这个范围内:"+Math.max(-mMenuView.getMeasuredWidth(), Math.min(left, 0)));
-                    return Math.max(-mMenuView.getMeasuredWidth(), Math.min(left, 0));
+                    /*LogUtils.d("即child的横向坐标只能在这个范围内:"+Math.max(-mMenuView.getMeasuredWidth(), Math.min(left, 0))
+                    +"\t -mMenuView.getMeasuredWidth()"+-mMenuView.getMeasuredWidth()+
+                    "\t Math.min(left, 0)"+Math.min(left, 0)+
+                    "\t left:"+left);*/
+                    //return Math.max(-mMenuView.getMeasuredWidth(), Math.min(left, 0));
+
+                   /* if(left>(widthPixels - mMenuView.getMeasuredWidth())){
+                        left = widthPixels - mMenuView.getMeasuredWidth();
+                    }*/
+
+                    Math.min(-mMenuView.getMeasuredWidth(), Math.min(left, 0));
+                    if(left < -(widthPixels - mMenuView.getMeasuredWidth())){
+                        left = -(widthPixels - mMenuView.getMeasuredWidth());
+                    }
+                    LogUtils.d("屏幕宽度：widthPixels"+widthPixels +
+                            "\tmMenuView.getMeasuredWidth():" + mMenuView.getMeasuredWidth() +
+                            "\tleft:"+left
+                    );
+                    return left;
+                    //return mMenuView.getMeasuredWidth() + left;
+                    //return Math.max(-mMenuView.getMeasuredWidth(), Math.min(left, 0));
                 }
                 return 0;
             }
@@ -74,14 +98,14 @@ public class HandleDrawerLayout extends ViewGroup {
             @Override
             public void onViewReleased(View releasedChild, float xvel, float yvel) {
                 // 松开手的时候，释放view，根据当前速度做相应处理
-                if(releasedChild == mDrawerGroup){
+                /*if(releasedChild == mDrawerGroup){
                     int menuViewWidth = mMenuView.getWidth();
                     float offset = (menuViewWidth + releasedChild.getLeft()) * 1.0f / menuViewWidth;
                     // 设置释放后的view慢慢移动到指定位置
                     mHelper.settleCapturedViewAt(xvel > 0 || xvel == 0 && offset > 0.5f ? 0 : -menuViewWidth, releasedChild.getTop());
                     // 要调用invalidate()才会开始移动
                     invalidate();
-                }
+                }*/
             }
 
             @Override
@@ -111,11 +135,12 @@ public class HandleDrawerLayout extends ViewGroup {
             }
         });
         // 设置左边缘检测，即从屏幕左边划进屏幕时，会回调onEdgeDragStarted
-        mHelper.setEdgeTrackingEnabled(ViewDragHelper.EDGE_LEFT);
+        mHelper.setEdgeTrackingEnabled(ViewDragHelper.EDGE_RIGHT);
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        LogUtils.i("onMeasure");
         // 设置各个子view的大小
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
@@ -125,8 +150,8 @@ public class HandleDrawerLayout extends ViewGroup {
         mContentView = getChildAt(0);
         mScrimView = getChildAt(1);
         mDrawerGroup = (ViewGroup) getChildAt(2);
-        mMenuView = mDrawerGroup.getChildAt(0);
-        mHandleView = mDrawerGroup.getChildAt(1);
+        mMenuView = mDrawerGroup.getChildAt(1);
+        mHandleView = mDrawerGroup.getChildAt(0);
 
         MarginLayoutParams lp = (MarginLayoutParams) mContentView.getLayoutParams();
         int contentWidthSpec = MeasureSpec.makeMeasureSpec(
@@ -153,6 +178,7 @@ public class HandleDrawerLayout extends ViewGroup {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         // 设置各子view的位置，注意第一次初始化位置和以后设置的位置略有区别
+        LogUtils.i("onLayout");
         mInLayout = true;
         MarginLayoutParams lp = (MarginLayoutParams) mContentView.getLayoutParams();
         mContentView.layout(lp.leftMargin, lp.topMargin,
@@ -165,7 +191,39 @@ public class HandleDrawerLayout extends ViewGroup {
                 lp.topMargin + mScrimView.getMeasuredHeight());
 
         lp = (MarginLayoutParams) mDrawerGroup.getLayoutParams();
-        int groupLeft;// = - mMenuView.getMeasuredWidth() + lp.leftMargin;
+
+        int groupRight;// = - mMenuView.getMeasuredWidth() + lp.leftMargin;
+        if(mFirstLayout){
+            groupRight =  mMenuView.getMeasuredWidth() + lp.rightMargin;
+        }else{
+            groupRight = mDrawerGroup.getRight();
+        }
+        //左上右下
+        mDrawerGroup.layout(groupRight, lp.topMargin,
+                groupRight + mDrawerGroup.getMeasuredWidth(),
+                lp.topMargin + mDrawerGroup.getMeasuredHeight());
+
+
+
+
+
+
+        /*int groupLeft;// = - mMenuView.getMeasuredWidth() + lp.leftMargin;
+        if(mFirstLayout){
+            //groupLeft = widthPixels + mMenuView.getMeasuredWidth() - lp.leftMargin;
+            groupLeft = 500;
+        }else{
+            groupLeft = widthPixels - mDrawerGroup.getLeft();
+        }
+        mDrawerGroup.layout(widthPixels,
+                0,
+                widthPixels + mMenuView.getMeasuredWidth(),
+                mDrawerGroup.getMeasuredHeight());*/
+        /*mDrawerGroup.layout(groupLeft,
+                            lp.topMargin,
+                         groupLeft + ScreenUtils.getScreenWidth() + mDrawerGroup.getMeasuredWidth(),
+                        lp.topMargin + mDrawerGroup.getMeasuredHeight());*/
+        /*
         if(mFirstLayout){
             groupLeft = - mMenuView.getMeasuredWidth() + lp.leftMargin;
         }else{
@@ -173,7 +231,7 @@ public class HandleDrawerLayout extends ViewGroup {
         }
         mDrawerGroup.layout(groupLeft, lp.topMargin,
                 groupLeft + mDrawerGroup.getMeasuredWidth(),
-                lp.topMargin + mDrawerGroup.getMeasuredHeight());
+                lp.topMargin + mDrawerGroup.getMeasuredHeight());*/
 
         initScrimView();
 

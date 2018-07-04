@@ -2,14 +2,17 @@ package com.lgw.activity;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.SystemClock;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ResourceUtils;
 import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.ThreadUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -66,6 +69,27 @@ public class NewMainActivity extends BaseActivity {
                         startActivity(new Intent(this,HandleDrawerActivity.class));
                         break;
                     case 4:
+                        ThreadUtils.executeByFixed(3, new ThreadUtils.SimpleTask<Object>() {
+                            @Override
+                            public Object doInBackground() {
+                                SystemClock.sleep(1000*2);
+                                return "操作完成";
+                            }
+
+                            @Override
+                            public void onSuccess(Object result) {
+                                LogUtils.d("当前线程是否是主线程："+ThreadUtils.isMainThread());
+                                ToastUtils.showShort((String)result);
+                            }
+                        });
+                        break;
+                    case 5:
+                        break;
+                    case 6:
+                        break;
+                    case 7:
+                        break;
+                    case 8:
                     case Integer.MAX_VALUE:
                         sessionInterface.isFragOrAty((MenuItem) o);
                         break;
