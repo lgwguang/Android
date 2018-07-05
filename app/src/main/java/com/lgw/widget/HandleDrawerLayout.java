@@ -42,8 +42,8 @@ public class HandleDrawerLayout extends ViewGroup {
     public HandleDrawerLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        int widthPixels = displayMetrics.widthPixels;
-        int heightPixels = displayMetrics.heightPixels;
+        widthPixels = displayMetrics.widthPixels;
+        heightPixels = displayMetrics.heightPixels;
         mHelper = ViewDragHelper.create(this, 1.0f, new ViewDragHelper.Callback() {
             @Override
             public int clampViewPositionHorizontal(View child, int left, int dx) {
@@ -65,13 +65,16 @@ public class HandleDrawerLayout extends ViewGroup {
                     }*/
 
                     Math.min(-mMenuView.getMeasuredWidth(), Math.min(left, 0));
-                    if(left < -(widthPixels - mMenuView.getMeasuredWidth())){
-                        left = -(widthPixels - mMenuView.getMeasuredWidth());
+                    if(left < (widthPixels - mMenuView.getMeasuredWidth())){
+                        left = (widthPixels - mMenuView.getMeasuredWidth());
                     }
                     LogUtils.d("屏幕宽度：widthPixels"+widthPixels +
-                            "\tmMenuView.getMeasuredWidth():" + mMenuView.getMeasuredWidth() +
+                            "\tmMenuView.getMeasuredWidth():" + mMenuView.getMeasuredWidth() +"mDrawerGroup"+mDrawerGroup.getMeasuredWidth()+
                             "\tleft:"+left
                     );
+                    if(left>widthPixels-mHandleView.getMeasuredWidth()){
+                        left = widthPixels-mHandleView.getMeasuredWidth();
+                    }
                     return left;
                     //return mMenuView.getMeasuredWidth() + left;
                     //return Math.max(-mMenuView.getMeasuredWidth(), Math.min(left, 0));
@@ -97,13 +100,16 @@ public class HandleDrawerLayout extends ViewGroup {
             }
             @Override
             public void onViewReleased(View releasedChild, float xvel, float yvel) {
+                super.onViewReleased(releasedChild,xvel,yvel);
                 // 松开手的时候，释放view，根据当前速度做相应处理
                 /*if(releasedChild == mDrawerGroup){
                     int menuViewWidth = mMenuView.getWidth();
-                    float offset = (menuViewWidth + releasedChild.getLeft()) * 1.0f / menuViewWidth;
+                    float offset = (menuViewWidth + releasedChild.getRight()) * 1.0f / menuViewWidth;
+//                    float offset = (releasedChild.getWidth() releasedChild.getLeft()) * 1.0f / menuViewWidth;
+                    float movePrecent = (releasedChild.getHeight() + releasedChild.getTop()) / (float) releasedChild.getHeight();
                     // 设置释放后的view慢慢移动到指定位置
-                    mHelper.settleCapturedViewAt(xvel > 0 || xvel == 0 && offset > 0.5f ? 0 : -menuViewWidth, releasedChild.getTop());
-                    // 要调用invalidate()才会开始移动
+                    LogUtils.d("释放后的view   xvel:"+xvel +"offset:"+offset);
+                    mHelper.settleCapturedViewAt(xvel > 0 || xvel == 0 && offset > 0.5f ? widthPixels - mMenuView.getMeasuredWidth() : widthPixels - mHandleView.getMeasuredWidth(), releasedChild.getTop());
                     invalidate();
                 }*/
             }
@@ -192,38 +198,23 @@ public class HandleDrawerLayout extends ViewGroup {
 
         lp = (MarginLayoutParams) mDrawerGroup.getLayoutParams();
 
-        int groupRight;// = - mMenuView.getMeasuredWidth() + lp.leftMargin;
+        int groupRight;
         if(mFirstLayout){
-            groupRight =  mMenuView.getMeasuredWidth() + lp.rightMargin;
+            groupRight = widthPixels + mMenuView.getMeasuredWidth() - lp.rightMargin;
         }else{
             groupRight = mDrawerGroup.getRight();
         }
+        LogUtils.d("mMenuView.getMeasuredWidth():"+mMenuView.getMeasuredWidth()+"mDrawerGroup.getRight():"+mDrawerGroup.getRight());
         //左上右下
-        mDrawerGroup.layout(groupRight, lp.topMargin,
-                groupRight + mDrawerGroup.getMeasuredWidth(),
-                lp.topMargin + mDrawerGroup.getMeasuredHeight());
-
-
-
-
-
-
+        LogUtils.d("groupRight:" + groupRight +"lp.topMargin"+lp.topMargin+
+                "groupRight + mDrawerGroup.getMeasuredWidth():"+groupRight + mDrawerGroup.getMeasuredWidth()
+        +"lp.topMargin + mDrawerGroup.getMeasuredHeight():"+lp.topMargin + mDrawerGroup.getMeasuredHeight());
+        mDrawerGroup.layout(widthPixels - mHandleView.getMeasuredWidth(), 0,
+                widthPixels + mMenuView.getMeasuredWidth() - mHandleView.getMeasuredWidth() ,
+                mMenuView.getMeasuredHeight());
+        LogUtils.i("widthPixels"+widthPixels+"\tmMenuView.getMeasuredWidth()"+mMenuView.getMeasuredWidth()
+        +"\tmMenuView.getMeasuredHeight()"+mMenuView.getMeasuredHeight());
         /*int groupLeft;// = - mMenuView.getMeasuredWidth() + lp.leftMargin;
-        if(mFirstLayout){
-            //groupLeft = widthPixels + mMenuView.getMeasuredWidth() - lp.leftMargin;
-            groupLeft = 500;
-        }else{
-            groupLeft = widthPixels - mDrawerGroup.getLeft();
-        }
-        mDrawerGroup.layout(widthPixels,
-                0,
-                widthPixels + mMenuView.getMeasuredWidth(),
-                mDrawerGroup.getMeasuredHeight());*/
-        /*mDrawerGroup.layout(groupLeft,
-                            lp.topMargin,
-                         groupLeft + ScreenUtils.getScreenWidth() + mDrawerGroup.getMeasuredWidth(),
-                        lp.topMargin + mDrawerGroup.getMeasuredHeight());*/
-        /*
         if(mFirstLayout){
             groupLeft = - mMenuView.getMeasuredWidth() + lp.leftMargin;
         }else{

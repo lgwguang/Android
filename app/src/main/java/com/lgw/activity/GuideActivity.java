@@ -30,7 +30,7 @@ public class GuideActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void initCountDownView() {
-        cdvTime.setTime(5);
+        cdvTime.setTime(2);
         cdvTime.start();
         cdvTime.setOnLoadingFinishListener(() -> {
             LogUtils.d("======进入主页面======");

@@ -12,18 +12,6 @@ public class HandleDrawerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_handle_drawer);
 
-        /*final HandleDrawerLayout handleDrawerLayout =findViewById(R.id.hdl_layout);
-        View handleView = findViewById(R.id.hdl_handle_view);*/
-        /*handleView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(handleDrawerLayout.isDrawerOpen()){
-                    handleDrawerLayout.closeDrawer();
-                }else{
-                    handleDrawerLayout.openDrawer();
-                }
-            }
-        });*/
 
     }
 }
