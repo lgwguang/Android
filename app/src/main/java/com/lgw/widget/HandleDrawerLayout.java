@@ -140,7 +140,7 @@ public class HandleDrawerLayout extends ViewGroup {
             }
         });
         // 设置左边缘检测，即从屏幕左边划进屏幕时，会回调onEdgeDragStarted
-        mHelper.setEdgeTrackingEnabled(ViewDragHelper.EDGE_RIGHT);
+        //mHelper.setEdgeTrackingEnabled(ViewDragHelper.EDGE_RIGHT);
     }
 
     @Override
