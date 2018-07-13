@@ -5,6 +5,12 @@
         },
         {
             "ActionId": "20102"
+        },
+        {
+            "ActionId": "20106"
+        },
+        {
+            "ActionId": "20107"
         }
     ],
     "HomeDisplayList": [
@@ -77,8 +83,8 @@
         {
             "ActionId": "20106",
             "ActionImage": "khfw",
-            "ActionName": "商城",
-            "ActionUrl": "",
+            "ActionName": "jsbridge",
+            "ActionUrl": "com.lgw.activity.JsbridgeActivity",
             "Clickable": "true",
             "DisplayType": "icon",
             "EntryType": "native",
@@ -89,8 +95,8 @@
         {
             "ActionId": "20107",
             "ActionImage": "wxjr",
-            "ActionName": "全部应用",
-            "ActionUrl": "",
+            "ActionName": "文字效果",
+            "ActionUrl": "com.lgw.activity.TextActivity",
             "Clickable": "true",
             "DisplayType": "icon",
             "EntryType": "native",

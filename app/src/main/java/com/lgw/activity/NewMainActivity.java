@@ -91,9 +91,7 @@ public class NewMainActivity extends BaseActivity {
                         ToastUtils.showShort(getRndStr(5));
                         break;
                     case 6:
-                        break;
                     case 7:
-                        break;
                     case 8:
                     case Integer.MAX_VALUE:
                         sessionInterface.isFragOrAty((MenuItem) o);

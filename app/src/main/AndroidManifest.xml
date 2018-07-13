@@ -83,6 +83,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.HandleDrawerActivity" />
+        <activity android:name=".activity.JsbridgeActivity" />
+        <activity android:name=".activity.TextActivity"></activity>
     </application>
 
 </manifest>
