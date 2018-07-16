@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.SystemClock;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
@@ -19,6 +20,7 @@ import com.google.gson.reflect.TypeToken;
 import com.lgw.R;
 import com.lgw.Utils.Base64Util;
 import com.lgw.Utils.DESUtils;
+import com.lgw.Utils.RSAUtil;
 import com.lgw.adapter.MenuAdapter;
 import com.lgw.base.BaseActivity;
 import com.lgw.base.BaseApplication;
@@ -62,7 +64,64 @@ public class NewMainActivity extends BaseActivity {
                         showEditDialog();
                         break;
                     case 1:
-                        EncryptionTest();
+                        String str  = Base64Util.base64EncodeStr("北京你好啊  今天是2017年");
+                        Log.d(TAG,str);
+                        String decodedStr = Base64Util.base64DecodedStr(str);
+                        Log.d(TAG,decodedStr);
+                        ToastUtils.showShort(decodedStr);
+
+//                        EncryptionTest();
+
+                        System.out.println("========================================");
+                        System.out.println("rsa开始啦");
+                        // des 字符串加密解密测试
+                        try {
+                            byte[] data = "GcsSloop中文".getBytes();
+
+                            // 密钥与数字签名获取
+//                            Map<String, Object> keyMap = RSAUtil.getKeyPair();
+//                            String publicKey = RSAUtil.getKey(keyMap, true);
+//                            System.out.println("rsa获取公钥： " + publicKey);
+//                            String privateKey = RSAUtil.getKey(keyMap, false);
+//                            System.out.println("rsa获取私钥： " + privateKey);
+                            final String publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC2HEP0E2uK/u+7C3YnY+z/6CdRj8ryYKuFJF8F\n" +
+                                    "    gEPJLhF2WkpLL+xqHixA2dP4wTzNwh5r918SrY3eTM9yUW5l2i03l49cZkVc29Gwzv/EVkLTB0dF\n" +
+                                    "    QgdwFz4l+ThfNHxA+swoJFn9lRFZxNaTNt/MXOh9F+/KuuOgCqESiSLrIwIDAQAB";
+                            final String privateKey = "MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBALYcQ/QTa4r+77sLdidj7P/oJ1GP\n" +
+                                    "    yvJgq4UkXwWAQ8kuEXZaSksv7GoeLEDZ0/jBPM3CHmv3XxKtjd5Mz3JRbmXaLTeXj1xmRVzb0bDO\n" +
+                                    "    /8RWQtMHR0VCB3AXPiX5OF80fED6zCgkWf2VEVnE1pM238xc6H0X78q646AKoRKJIusjAgMBAAEC\n" +
+                                    "    gYEAtK6goUavWc4NDpiVlwlmuJSehibTpd1R8ByhBnU3TCCgBLwaoDShLLxZDdLRpCodaMxjoJ1j\n" +
+                                    "    v8VgT6IH5JV0oH7Z4UTZFJwTXV/eAhmv55iu8eCxlcv5F3S6865JkXXP5Pea0Hldm1eVHGmfoIE9\n" +
+                                    "    LJuVwflR79jIHeHqs6BqUdkCQQDdjFvkAsFmo3mOgkUm5UtYx5aEPIwkYspXYCVF2F1ZOiHY3qYe\n" +
+                                    "    g2BicDEXdCzmsYIe6XXPp0bO+7EG8HvXKLNvAkEA0m3rgX3yKiYc0VWaE22JKEp7QCAqmHztukhn\n" +
+                                    "    gicfHYKHa2j6XdDU5xFJYCyjc9UNkqlS+uWHZSXtlMjCltHZjQJAFSe79o/Uy+o8R0FlPQuUIEwe\n" +
+                                    "    sU3ey/KrA6Dorjy03TpR1RWdozhEUeIIrgan6vd0R2Nfno6IkmcyRklcafU2/QJBAMKgJe1L1tpD\n" +
+                                    "    C+5VtT741Z3tXZeO6LbG/X2JECtiEbZSjvu6Sa7RwsjAxVPtlXRB/t7CO1yRRKw560bsdIXYK9UC\n" +
+                                    "    QQCLY6+gB6QKRnqemP8CB9XjzjljxJT2syprtVEp2XWdYtWnvtSk4XnyK0+Q04bNaUHCGL8DAsjM\n" +
+                                    "    PijC8zj5ScWM";
+                            // 公钥加密私钥解密
+                            byte[] rsaPublic =
+                                    RSAUtil.rsa(data, publicKey, RSAUtil.RSA_PUBLIC_ENCRYPT);
+                            System.out.println("rsa公钥加密： " + new String(rsaPublic));
+                            System.out.println("rsa私钥解密： " + new String(
+                                    RSAUtil.rsa(rsaPublic, privateKey, RSAUtil.RSA_PRIVATE_DECRYPT)));
+
+                            // 私钥加密公钥解密
+                            byte[] rsaPrivate =
+                                    RSAUtil.rsa(data, privateKey, RSAUtil.RSA_PRIVATE_ENCRYPT);
+                            System.out.println("rsa私钥加密： " + new String(rsaPrivate));
+                            System.out.println("rsa公钥解密： " + new String(
+                                    RSAUtil.rsa(rsaPrivate, publicKey, RSAUtil.RSA_PUBLIC_DECRYPT)));
+
+                            // 私钥签名及公钥签名校验
+                            String signStr = RSAUtil.sign(rsaPrivate, privateKey);
+                            System.out.println("rsa数字签名生成： " + signStr);
+                            System.out.println("rsa数字签名校验： " + RSAUtil.verify(rsaPrivate, publicKey, signStr));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+
                         break;
                     case 2:
                         Intent intent = new Intent(this,SchameFilterActivity.class);

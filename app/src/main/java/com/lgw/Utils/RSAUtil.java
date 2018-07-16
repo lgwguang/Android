@@ -109,7 +109,7 @@ public class RSAUtil {
     private static KeyFactory getKeyFactory() throws NoSuchAlgorithmException,
             NoSuchProviderException {
         KeyFactory keyFactory;
-        if (Build.VERSION.SDK_INT >= 16) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             keyFactory = KeyFactory.getInstance("RSA", "BC");
         } else {
             keyFactory = KeyFactory.getInstance("RSA");
@@ -125,7 +125,7 @@ public class RSAUtil {
     private static KeyPairGenerator getKeyPairGenerator() throws NoSuchProviderException,
             NoSuchAlgorithmException {
         KeyPairGenerator keyPairGen;
-        if (Build.VERSION.SDK_INT >= 16) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             keyPairGen = KeyPairGenerator.getInstance("RSA", "BC");
         } else {
             keyPairGen = KeyPairGenerator.getInstance("RSA");
