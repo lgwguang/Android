@@ -70,18 +70,21 @@ dependencies {
     implementation "com.android.support:design:$supportVersion"
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support:support-vector-drawable:27.1.1'
+    implementation 'com.android.support:support-v4:27.1.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.blankj:utilcode:1.17.3'
-    //api 'com.abrahamcaijin.commonutil:CommonUtil:1.0.2'//此库有问题
-    //implementation 'com.ihongqiqu:android-utils:1.0.2'
+    implementation 'com.jakewharton:disklrucache:2.0.2'
     implementation 'com.lzy.net:okgo:3.0.4'
     implementation 'com.lzy.net:okrx2:2.0.2'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     implementation 'com.readystatesoftware.chuck:library:1.0.4'
     implementation 'com.google.code.gson:gson:2.8.0'
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-5'
+
+    implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
+    implementation 'me.jessyan:rxerrorhandler:2.1.1'
     //定位功能
     implementation 'com.amap.api:location:latest.integration'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
@@ -93,4 +96,7 @@ dependencies {
     annotationProcessor 'com.alibaba:arouter-compiler:1.1.4'
     implementation files('libs/nineoldandroids-2.4.0.jar')
     implementation 'com.github.lzyzsd:jsbridge:1.0.4'
+
+    implementation "com.google.dagger:dagger:2.14.1"
+    annotationProcessor "com.google.dagger:dagger-compiler:2.14.1"
 }

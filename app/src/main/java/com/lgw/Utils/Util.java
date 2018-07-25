@@ -1,6 +1,11 @@
 package com.lgw.Utils;
 
+import android.content.Context;
+import android.os.Environment;
+
+import java.io.File;
 import java.lang.reflect.Field;
+
 
 public class Util {
 
@@ -12,5 +17,12 @@ public class Util {
             e.printStackTrace();
             return -1;
         }
+    }
+
+    public static File getDiskCacheDir(Context context, String uniqueName) {
+        final String cachePath = Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) ||!Environment.isExternalStorageRemovable()
+                ? context.getExternalCacheDir().getPath()
+                : context.getCacheDir().getPath();
+        return new File(cachePath + File.separator + uniqueName);
     }
 }
