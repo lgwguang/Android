@@ -51,10 +51,8 @@ public class NewMainActivity extends BaseActivity implements RadioGroup.OnChecke
         fl_content = findViewById(R.id.fl_content);
         rg = findViewById(R.id.rg);
         rg.setOnCheckedChangeListener(this);
+        rg.check(R.id.rb_home);
 
-
-
-//        rb_home
 
 //        gv = findViewById(R.id.gv);
 //        String menu = ResourceUtils.readAssets2String("menudata.json","UTF-8");
