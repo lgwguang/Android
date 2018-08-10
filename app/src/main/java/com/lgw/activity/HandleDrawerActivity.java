@@ -14,7 +14,9 @@ public class HandleDrawerActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
 
-
-
+    }
 }

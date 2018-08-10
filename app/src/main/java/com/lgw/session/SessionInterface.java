@@ -18,15 +18,12 @@ import com.lgw.bean.MenuItem;
  * ================================
  */
 public class SessionInterface {
-    private Context context;
-    private Activity activity;
-
+    private Context mContext;
     public static boolean isClickMenu = false;
     public static MenuItem menuParams;
 
-    public SessionInterface(Activity activity) {
-        this.activity = activity;
-        this.context = activity.getApplicationContext();
+    public SessionInterface(Context context) {
+        this.mContext = context.getApplicationContext();
     }
 
     public Boolean Authentication(String actionId) {
@@ -52,15 +49,15 @@ public class SessionInterface {
             isClickMenu = true;
             menuParams = item;
             ToastUtils.showShort("请登录");
-            activity.startActivity(new Intent(activity, LoginActivity.class));
+            mContext.startActivity(new Intent(mContext, LoginActivity.class));
             return;
         }
         try {
             Class cl = Class.forName(item.getActionUrl());
             Object o = cl.newInstance();
             if (o instanceof Activity) {
-                Intent intent = new Intent(activity, cl);
-                activity.startActivity(intent);
+                Intent intent = new Intent(mContext, cl);
+                mContext.startActivity(intent);
             } else if (o instanceof Fragment) {
 
             }

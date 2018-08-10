@@ -36,11 +36,14 @@ public class NewMainActivity extends BaseActivity implements RadioGroup.OnChecke
 
     public View  view;
     private ViewGroup viewGroup;
-//    private GridView gv;
     private FrameLayout fl_content;
     private RadioGroup rg;
-
     private ArrayList<String> list;
+    private final String HOME = "home";
+    private final String OTHER = "other";
+    private String MINE = "mine";
+    private String SETTING = "setting";
+
     @Override
     public int getContentView() {
         return R.layout.activity_new_main;
@@ -171,14 +174,16 @@ public class NewMainActivity extends BaseActivity implements RadioGroup.OnChecke
 //        }
 
     }
+
+
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        Fragment fragment1 = fm.findFragmentByTag("home");
-        Fragment fragment2 = fm.findFragmentByTag("other");
-        Fragment fragment3 = fm.findFragmentByTag("mine");
-        Fragment fragment4 = fm.findFragmentByTag("setting");
+        Fragment fragment1 = fm.findFragmentByTag(HOME);
+        Fragment fragment2 = fm.findFragmentByTag(OTHER);
+        Fragment fragment3 = fm.findFragmentByTag(MINE);
+        Fragment fragment4 = fm.findFragmentByTag(SETTING);
         if (fragment1 != null) {
             ft.hide(fragment1);
         }
@@ -194,16 +199,16 @@ public class NewMainActivity extends BaseActivity implements RadioGroup.OnChecke
         switch (checkedId) {
             case R.id.rb_home:
                 if (fragment1 == null) {
-                    fragment1 = HomeFragment.newInstance();
-                    ft.add(R.id.fl_content, fragment1, "home");
+                    fragment1 = new HomeFragment();
+                    ft.add(R.id.fl_content, fragment1, HOME);
                 } else {
                     ft.show(fragment1);
                 }
                 break;
             case R.id.rb_other:
                 if (fragment2 == null) {
-                    fragment2 = OtherFragment.newInstance();
-                    ft.add(R.id.fl_content, fragment2, "other");
+                    fragment2 = new OtherFragment();
+                    ft.add(R.id.fl_content, fragment2, OTHER);
                 } else {
                     ft.show(fragment2);
                 }
@@ -211,7 +216,7 @@ public class NewMainActivity extends BaseActivity implements RadioGroup.OnChecke
             case R.id.rb_mine:
                 if (fragment3 == null) {
                     fragment3 = new MineFragment();
-                    ft.add(R.id.fl_content, fragment3, "mine");
+                    ft.add(R.id.fl_content, fragment3, MINE);
                 } else {
                     ft.show(fragment3);
                 }
@@ -219,7 +224,7 @@ public class NewMainActivity extends BaseActivity implements RadioGroup.OnChecke
             case R.id.rb_setting:
                 if (fragment4 == null) {
                     fragment4 = new SettingFragment();
-                    ft.add(R.id.fl_content, fragment4, "setting");
+                    ft.add(R.id.fl_content, fragment4, SETTING);
                 } else {
                     ft.show(fragment4);
                 }
