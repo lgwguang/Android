@@ -18,20 +18,6 @@ public class OtherFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-
-    public OtherFragment() {
-        // Required empty public constructor
-    }
-
-    public static OtherFragment newInstance() {
-        OtherFragment fragment = new OtherFragment();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

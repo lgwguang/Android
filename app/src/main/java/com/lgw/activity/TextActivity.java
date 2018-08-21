@@ -1,69 +1,56 @@
 package com.lgw.activity;
 
-import android.animation.ValueAnimator;
-import android.graphics.LinearGradient;
-import android.graphics.Matrix;
-import android.graphics.Shader;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.SpannableStringBuilder;
-import android.view.animation.LinearInterpolator;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.SpanUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.lgw.R;
+import com.lgw.Utils.MessageEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public class TextActivity extends AppCompatActivity {
 
-    SpanUtils mSpanUtils;
-    Shader mShader;
-
-    SpannableStringBuilder animSsb;
-    ValueAnimator valueAnimator;
-
-    float         mShaderWidth;
-    float    density;
-
-    Matrix matrix;
+    private Button btn_close;
     private TextView tv;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_text);
+
         tv = findViewById(R.id.textView);
-
-        density = getResources().getDisplayMetrics().density;
-        matrix = new Matrix();
-
-        mShaderWidth = 64 * density * 4;
-        mShader = new LinearGradient(0, 0, mShaderWidth, 0,
-                getResources().getIntArray(R.array.rainbow), null, Shader.TileMode.REPEAT);
-
-
-        mSpanUtils = new SpanUtils().appendLine("彩虹动画").setFontSize(64, true).setShader(mShader);
-
-        animSsb = mSpanUtils.create();
-        startAnim();
-    }
-
-    private void startAnim() {
-        valueAnimator = ValueAnimator.ofFloat(0, 1);
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        btn_close = findViewById(R.id.btn_close);
+        btn_close.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                // shader
-                matrix.reset();
-                matrix.setTranslate((Float) animation.getAnimatedValue() * mShaderWidth, 0);
-                mShader.setLocalMatrix(matrix);
-                // update
-                tv.setText(animSsb);
+            public void onClick(View v) {
+                ToastUtils.showShort("点击了");
+                EventBus.getDefault().post(new MessageEvent("今天是星期二"));
+                finish();
             }
         });
-
-        valueAnimator.setInterpolator(new LinearInterpolator());
-        valueAnimator.setDuration(600 * 3);
-        valueAnimator.setRepeatCount(ValueAnimator.INFINITE);
-        valueAnimator.start();
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(String event){
+        tv.setText(event);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
 }
