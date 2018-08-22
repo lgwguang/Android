@@ -31,7 +31,10 @@ import com.lgw.activity.TextActivity;
 import com.lgw.adapter.MenuAdapter;
 import com.lgw.base.BaseApplication;
 import com.lgw.bean.MenuItem;
+import com.lgw.callback.DialogCallback;
 import com.lgw.session.SessionInterface;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.model.Response;
 import com.youth.banner.Banner;
 
 import org.greenrobot.eventbus.EventBus;
@@ -69,7 +72,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        initdata();
     }
 
     @Override
@@ -96,6 +99,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void onMessageEvent(MessageEvent event) {
         ToastUtils.showShort(event.data);
         btn.setText(event.data);
+    }
+
+
+    public void initdata(){
+        OkGo.<JSONObject>get("http://www.wanandroid.com/banner/json")
+                .tag(this)
+                .execute(new DialogCallback<JSONObject>(HomeFragment.this.getActivity()) {
+                    @Override
+                    public void onSuccess(Response<JSONObject> response) {
+                        JSONObject body = response.body();
+                        JSONArray data = body.optJSONArray("data");
+                        for (int i = 0; i < data.length(); i++) {
+                            
+                        }
+
+                    }
+                });
     }
 
     @Override

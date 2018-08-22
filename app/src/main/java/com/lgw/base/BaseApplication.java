@@ -1,7 +1,6 @@
 package com.lgw.base;
 
-import android.app.Application;
-
+import android.support.multidex.MultiDexApplication;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
@@ -24,7 +23,7 @@ import java.util.logging.Level;
 import okhttp3.OkHttpClient;
 
 
-public class BaseApplication extends Application {
+public class BaseApplication extends MultiDexApplication {
 
     public static final String a = "测试是";
     public static HashMap<String, String> AuthorityList = new HashMap<>();

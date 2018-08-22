@@ -1,5 +1,4 @@
 package com.lgw.activity;
-import android.app.ActivityManager;
 import android.os.Bundle;
 import android.widget.ImageView;
 import com.blankj.utilcode.util.ActivityUtils;

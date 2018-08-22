@@ -1,6 +1,5 @@
 package com.lgw.presenter;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.widget.ImageView;
 
@@ -8,13 +7,8 @@ import com.bumptech.glide.Glide;
 import com.jude.beam.bijection.Presenter;
 import com.lgw.Utils.RxUtil;
 import com.lgw.activity.NewSplashActivity;
-
-import org.greenrobot.eventbus.Subscribe;
-
 import java.util.concurrent.TimeUnit;
-
 import rx.Observable;
-import rx.Observer;
 import rx.Subscription;
 import rx.functions.Action1;
 
