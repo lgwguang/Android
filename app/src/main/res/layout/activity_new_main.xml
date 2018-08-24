@@ -6,24 +6,18 @@
 
     <include layout="@layout/common_title" />
 
-    <!--<GridView
-        android:id="@+id/gv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar"
-        android:numColumns="2" />-->
-
     <FrameLayout
         android:id="@+id/fl_content"
-        android:layout_below="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_above="@id/rg"
+        android:layout_below="@+id/toolbar" />
 
     <View
         android:id="@+id/divide"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_above="@+id/rg"
+        android:layout_above="@id/rg"
         android:background="#cccccc" />
 
     <RadioGroup
@@ -32,7 +26,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="#ffffff"
-        android:checkedButton="@+id/order_process"
         android:gravity="center"
         android:orientation="horizontal"
         android:paddingBottom="3dp"

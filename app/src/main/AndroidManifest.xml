@@ -83,10 +83,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.HandleDrawerActivity" />
-        <!-- <activity android:name=".activity.JsbridgeActivity" /> -->
+        <activity android:name=".activity.JsbridgeActivity" />
         <activity android:name=".activity.TextActivity" />
         <activity android:name=".activity.ImageZoomActivity" />
-        <activity android:name=".activity.MapActivity"></activity>
+        <activity android:name=".activity.MapActivity"/>
+        <activity android:name=".activity.AppBarActivity"/>
     </application>
 
 </manifest>

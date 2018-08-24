@@ -54,10 +54,8 @@ public class NewMainActivity extends BaseActivity implements RadioGroup.OnChecke
         fl_content = findViewById(R.id.fl_content);
         rg = findViewById(R.id.rg);
         rg.setOnCheckedChangeListener(this);
-        rg.check(R.id.rb_home);
+        onCheckedChanged(rg,R.id.rb_home);
 
-
-//        gv = findViewById(R.id.gv);
 //        String menu = ResourceUtils.readAssets2String("menudata.json","UTF-8");
 //        try {
 //            JSONObject jsonObject = new JSONObject(menu);
@@ -175,7 +173,6 @@ public class NewMainActivity extends BaseActivity implements RadioGroup.OnChecke
 
     }
 
-
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         FragmentManager fm = getSupportFragmentManager();
@@ -235,6 +232,7 @@ public class NewMainActivity extends BaseActivity implements RadioGroup.OnChecke
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+        if(rg==null){ return;}
         for (int i = 0; i < rg.getChildCount(); i++) {
             RadioButton mTab = (RadioButton) rg.getChildAt(i);
             FragmentManager fm = getSupportFragmentManager();

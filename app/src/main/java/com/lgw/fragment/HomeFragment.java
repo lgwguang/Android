@@ -25,6 +25,7 @@ import com.lgw.Utils.Code;
 import com.lgw.Utils.GlideImageLoader;
 import com.lgw.Utils.MessageEvent;
 import com.lgw.Utils.RSAUtil;
+import com.lgw.activity.AppBarActivity;
 import com.lgw.activity.HandleDrawerActivity;
 import com.lgw.activity.SchameFilterActivity;
 import com.lgw.activity.TextActivity;
@@ -224,7 +225,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         startActivity(new Intent(mContext,HandleDrawerActivity.class));
                         break;
                     case 4:
-                        ThreadUtils.executeByFixed(3, new ThreadUtils.SimpleTask<Object>() {
+                        startActivity(new Intent(mContext,AppBarActivity.class));
+                        /*ThreadUtils.executeByFixed(3, new ThreadUtils.SimpleTask<Object>() {
                             @Override
                             public Object doInBackground() {
                                 SystemClock.sleep(1000*2);
@@ -236,13 +238,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                                 LogUtils.d("当前线程是否是主线程："+ThreadUtils.isMainThread());
                                 ToastUtils.showShort((String)result);
                             }
-                        });
+                        });*/
                         break;
                     case 5:
-//                        ToastUtils.showShort(getRndStr(5));
+                        //ToastUtils.showShort(getRndStr(5));
                         break;
                     case 6:
-                        Code a = new Code();
+                        /*Code a = new Code();*/
                     case 7:
                     case 8:
                     case 14:
