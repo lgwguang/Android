@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,13 +14,11 @@ import android.widget.TextView;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ResourceUtils;
-import com.blankj.utilcode.util.ThreadUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lgw.R;
 import com.lgw.Utils.Base64Util;
-import com.lgw.Utils.Code;
 import com.lgw.Utils.GlideImageLoader;
 import com.lgw.Utils.MessageEvent;
 import com.lgw.Utils.RSAUtil;
@@ -31,12 +28,15 @@ import com.lgw.activity.SchameFilterActivity;
 import com.lgw.activity.TextActivity;
 import com.lgw.adapter.MenuAdapter;
 import com.lgw.base.BaseApplication;
+import com.lgw.bean.Ad;
+import com.lgw.bean.BaseResponse;
 import com.lgw.bean.MenuItem;
 import com.lgw.callback.DialogCallback;
 import com.lgw.session.SessionInterface;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.model.Response;
 import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -58,7 +58,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private SessionInterface sessionInterface;
     private Banner banner;
     private TextView btn;
-
+    private List<String> images = new ArrayList<>();
+    private List<String> titles = new ArrayList<>();
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -85,13 +86,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         btn = view.findViewById(R.id.btn_json);
         btn.setOnClickListener(this);
         banner.setImageLoader(new GlideImageLoader());
-        //设置图片集合
-        List<String> images = new ArrayList<>();
-        images.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1525319864&di=87f476652c96678547ccabbf112076be&imgtype=jpg&er=1&src=http%3A%2F%2Fimg.pconline.com.cn%2Fimages%2Fupload%2Fupc%2Ftx%2Fgamephotolib%2F1410%2F27%2Fc0%2F40170771_1414341013392.jpg");
-        images.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524714908870&di=9d43d35cefbabacdc879733aa7ddc82b&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimage%2Fc0%253Dshijue1%252C0%252C0%252C294%252C40%2Fsign%3D46de93bfc711728b24208461a095a9bb%2F4610b912c8fcc3ce5423d51d9845d688d43f2038.jpg");
-        images.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524714935901&di=052557513540f3d740eeeb2439c585bb&imgtype=0&src=http%3A%2F%2Fwww.gzlco.com%2Fimggzl%2F214%2F1b6e6520ca474fe4bd3ff728817950717651.jpeg");
-        banner.setImages(images);
-        banner.start();
+        banner.setBannerStyle(BannerConfig.NUM_INDICATOR_TITLE);
         initView();
         return view;
     }
@@ -104,17 +99,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
 
     public void initdata(){
-        OkGo.<JSONObject>get("http://www.wanandroid.com/banner/json")
+        OkGo.<BaseResponse<List<Ad>>>get("http://www.wanandroid.com/banner/json")
                 .tag(this)
-                .execute(new DialogCallback<JSONObject>(HomeFragment.this.getActivity()) {
+                .execute(new DialogCallback<BaseResponse<List<Ad>>>(HomeFragment.this.getActivity()) {
                     @Override
-                    public void onSuccess(Response<JSONObject> response) {
-                        JSONObject body = response.body();
-                        JSONArray data = body.optJSONArray("data");
-                        for (int i = 0; i < data.length(); i++) {
-                            
+                    public void onSuccess(Response<BaseResponse<List<Ad>>> response) {
+                        BaseResponse<List<Ad>> body = response.body();
+                        List<Ad> data = body.getData();
+                        for (Ad datum : data) {
+                            String imagePath = datum.getImagePath();
+                            images.add(imagePath);
+                            titles.add(datum.getTitle());
                         }
-
+                        banner.setImages(images);
+                        banner.setBannerTitles(titles);
+                        banner.start();
                     }
                 });
     }

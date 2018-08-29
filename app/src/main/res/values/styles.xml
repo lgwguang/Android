@@ -30,4 +30,10 @@
         <item name="android:button">@null</item>
         <item name="android:gravity">center</item>
     </style>
+
+    <style name="LoadingDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="colorAccent">@color/rainbow_yellow</item>
+    </style>
 </resources>
