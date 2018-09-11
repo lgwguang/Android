@@ -21,6 +21,7 @@ import com.lgw.R;
 import com.lgw.Utils.Base64Util;
 import com.lgw.Utils.GlideImageLoader;
 import com.lgw.Utils.MessageEvent;
+import com.lgw.Utils.PermissionUtil;
 import com.lgw.Utils.RSAUtil;
 import com.lgw.activity.AppBarActivity;
 import com.lgw.activity.HandleDrawerActivity;
@@ -35,6 +36,7 @@ import com.lgw.callback.DialogCallback;
 import com.lgw.session.SessionInterface;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.model.Response;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 
@@ -44,9 +46,12 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xml.sax.ErrorHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
@@ -151,7 +156,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 switch (position) {
                     case 0:
 //                        showEditDialog();
+                        PermissionUtil.externalStorage(new PermissionUtil.RequestPermission() {
+                            @Override
+                            public void onRequestPermissionSuccess() {
 
+                            }
+
+                            @Override
+                            public void onRequestPermissionFailure(List<String> permissions) {
+
+                            }
+
+                            @Override
+                            public void onRequestPermissionFailureWithAskNeverAgain(List<String> permissions) {
+
+                            }
+                        },new RxPermissions(HomeFragment.this),RxErrorHandler.builder().with(mContext).build());
                         EventBus.getDefault().post("z这是fragment传递过去的");
                         startActivity(new Intent(mContext,TextActivity.class));
                         break;
@@ -292,6 +312,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void onDestroy() {
         super.onDestroy();
         LogUtils.d("=======onDestroy=======");
+        images = null;
+        titles = null;
         EventBus.getDefault().unregister(this);
     }
 }
