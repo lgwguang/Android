@@ -15,6 +15,8 @@ import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
 import com.lzy.okgo.model.HttpHeaders;
 import com.lzy.okgo.model.HttpParams;
 import com.squareup.leakcanary.LeakCanary;
+import com.tencent.android.tpush.XGPushConfig;
+import com.tencent.android.tpush.XGPushManager;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
