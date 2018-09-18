@@ -4,12 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.LogUtils;
@@ -57,7 +61,7 @@ import java.util.List;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 
-public class HomeFragment extends Fragment{
+public class HomeFragment extends Fragment implements AppBarLayout.OnOffsetChangedListener {
 
     private GridView gv;
 
@@ -68,6 +72,10 @@ public class HomeFragment extends Fragment{
     private TextView btn;
     private List<String> images = new ArrayList<>();
     private List<String> titles = new ArrayList<>();
+    CollapsingToolbarLayout collapsingToolbarLayout;
+    Toolbar toolbar;
+    AppBarLayout appbarlayout;
+    RelativeLayout rl_show,rl_hide;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -86,13 +94,18 @@ public class HomeFragment extends Fragment{
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         banner = view.findViewById(R.id.banner);
         gv = view.findViewById(R.id.gv);
-        /*btn = view.findViewById(R.id.btn_json);
-        btn.setOnClickListener(this);*/
+        collapsingToolbarLayout = view.findViewById(R.id.collapsingtoolbarlayout);
+        toolbar = view.findViewById(R.id.toolbar);
+        appbarlayout = view.findViewById(R.id.appbarlayout);
+        rl_show = view.findViewById(R.id.rl_show);
+        rl_hide = view.findViewById(R.id.rl_hide);
+
+
+        appbarlayout.addOnOffsetChangedListener(this);
         banner.setImageLoader(new GlideImageLoader());
         banner.setBannerStyle(BannerConfig.NUM_INDICATOR_TITLE);
         initView();
@@ -291,5 +304,19 @@ public class HomeFragment extends Fragment{
         images = null;
         titles = null;
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        if(verticalOffset<=0){
+            int totalScrollRange = appBarLayout.getTotalScrollRange();
+            if(Math.abs(verticalOffset)==totalScrollRange){
+                rl_show.setVisibility(View.GONE);
+                rl_hide.setVisibility(View.VISIBLE);
+            }else{
+                rl_show.setVisibility(View.VISIBLE);
+                rl_hide.setVisibility(View.GONE);
+            }
+        }
     }
 }
