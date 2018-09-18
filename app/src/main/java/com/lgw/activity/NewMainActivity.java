@@ -1,5 +1,6 @@
 package com.lgw.activity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.ResourceUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.jaeger.library.StatusBarUtil;
 import com.lgw.R;
 import com.lgw.Utils.Base64Util;
 import com.lgw.Utils.DESUtils;
@@ -204,5 +206,12 @@ public class NewMainActivity extends BaseActivity implements RadioGroup.OnChecke
             }
         }
     }
-
+    public void initStatuBar() {
+        StatusBarUtil.setLightMode(this);
+        StatusBarUtil.setColor(this, Color.parseColor("#FFFFFF"),0);
+    }
+    public void initStatuBar_hide() {
+        StatusBarUtil.setDarkMode(this);
+        StatusBarUtil.setColor(this, Color.parseColor("#3F51B5"),0);
+    }
 }

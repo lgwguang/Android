@@ -21,6 +21,7 @@ import com.blankj.utilcode.util.ResourceUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.jaeger.library.StatusBarUtil;
 import com.lgw.R;
 import com.lgw.Utils.Base64Util;
 import com.lgw.Utils.GlideImageLoader;
@@ -108,6 +109,7 @@ public class HomeFragment extends Fragment implements AppBarLayout.OnOffsetChang
         appbarlayout.addOnOffsetChangedListener(this);
         banner.setImageLoader(new GlideImageLoader());
         banner.setBannerStyle(BannerConfig.NUM_INDICATOR_TITLE);
+        ((NewMainActivity)mContext).initStatuBar();
         initView();
         return view;
     }
@@ -313,10 +315,13 @@ public class HomeFragment extends Fragment implements AppBarLayout.OnOffsetChang
             if(Math.abs(verticalOffset)==totalScrollRange){
                 rl_show.setVisibility(View.GONE);
                 rl_hide.setVisibility(View.VISIBLE);
+                ((NewMainActivity)mContext).initStatuBar();
             }else{
                 rl_show.setVisibility(View.VISIBLE);
                 rl_hide.setVisibility(View.GONE);
+                ((NewMainActivity)mContext).initStatuBar_hide();
             }
         }
     }
+
 }
