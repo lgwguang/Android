@@ -21,10 +21,13 @@ import com.lgw.R;
 import com.lgw.Utils.Base64Util;
 import com.lgw.Utils.GlideImageLoader;
 import com.lgw.Utils.MessageEvent;
+import com.lgw.Utils.OkGoUtil;
 import com.lgw.Utils.PermissionUtil;
 import com.lgw.Utils.RSAUtil;
 import com.lgw.activity.AppBarActivity;
 import com.lgw.activity.HandleDrawerActivity;
+import com.lgw.activity.MainActivity;
+import com.lgw.activity.NewMainActivity;
 import com.lgw.activity.SchameFilterActivity;
 import com.lgw.activity.TextActivity;
 import com.lgw.adapter.MenuAdapter;
@@ -54,7 +57,7 @@ import java.util.List;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 
-public class HomeFragment extends Fragment implements View.OnClickListener {
+public class HomeFragment extends Fragment{
 
     private GridView gv;
 
@@ -88,8 +91,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         banner = view.findViewById(R.id.banner);
         gv = view.findViewById(R.id.gv);
-        btn = view.findViewById(R.id.btn_json);
-        btn.setOnClickListener(this);
+        /*btn = view.findViewById(R.id.btn_json);
+        btn.setOnClickListener(this);*/
         banner.setImageLoader(new GlideImageLoader());
         banner.setBannerStyle(BannerConfig.NUM_INDICATOR_TITLE);
         initView();
@@ -104,23 +107,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
 
     public void initdata(){
-        OkGo.<BaseResponse<List<Ad>>>get("http://www.wanandroid.com/banner/json")
-                .tag(this)
-                .execute(new DialogCallback<BaseResponse<List<Ad>>>(HomeFragment.this.getActivity()) {
-                    @Override
-                    public void onSuccess(Response<BaseResponse<List<Ad>>> response) {
-                        BaseResponse<List<Ad>> body = response.body();
-                        List<Ad> data = body.getData();
-                        for (Ad datum : data) {
-                            String imagePath = datum.getImagePath();
-                            images.add(imagePath);
-                            titles.add(datum.getTitle());
-                        }
-                        banner.setImages(images);
-                        banner.setBannerTitles(titles);
-                        banner.start();
-                    }
-                });
+
+        OkGoUtil.getRequets("http://www.wanandroid.com/banner/json", this, null, new DialogCallback<BaseResponse<List<Ad>>>((NewMainActivity)mContext) {
+
+            @Override
+            public void onSuccess(Response<BaseResponse<List<Ad>>> response) {
+                BaseResponse<List<Ad>> body = response.body();
+                List<Ad> data = body.getData();
+                for (Ad datum : data) {
+                    String imagePath = datum.getImagePath();
+                    images.add(imagePath);
+                    titles.add(datum.getTitle());
+                }
+                banner.setImages(images);
+                banner.setBannerTitles(titles);
+                banner.start();
+            }
+        });
     }
 
     @Override
@@ -181,21 +184,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         String decodedStr = Base64Util.base64DecodedStr(str);
                         Log.d(TAG,decodedStr);
                         ToastUtils.showShort(decodedStr);
-
-//                        EncryptionTest();
-
                         System.out.println("========================================");
                         System.out.println("rsa开始啦");
                         // des 字符串加密解密测试
                         try {
                             byte[] data = "GcsSloop中文".getBytes();
-
-                            // 密钥与数字签名获取
-//                            Map<String, Object> keyMap = RSAUtil.getKeyPair();
-//                            String publicKey = RSAUtil.getKey(keyMap, true);
-//                            System.out.println("rsa获取公钥： " + publicKey);
-//                            String privateKey = RSAUtil.getKey(keyMap, false);
-//                            System.out.println("rsa获取私钥： " + privateKey);
                             final String publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC2HEP0E2uK/u+7C3YnY+z/6CdRj8ryYKuFJF8F\n" +
                                     "    gEPJLhF2WkpLL+xqHixA2dP4wTzNwh5r918SrY3eTM9yUW5l2i03l49cZkVc29Gwzv/EVkLTB0dF\n" +
                                     "    QgdwFz4l+ThfNHxA+swoJFn9lRFZxNaTNt/MXOh9F+/KuuOgCqESiSLrIwIDAQAB";
@@ -232,8 +225,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-
-
                         break;
                     case 2:
                         Intent intent = new Intent(mContext,SchameFilterActivity.class);
@@ -245,25 +236,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         break;
                     case 4:
                         startActivity(new Intent(mContext,AppBarActivity.class));
-                        /*ThreadUtils.executeByFixed(3, new ThreadUtils.SimpleTask<Object>() {
-                            @Override
-                            public Object doInBackground() {
-                                SystemClock.sleep(1000*2);
-                                return "操作完成";
-                            }
-
-                            @Override
-                            public void onSuccess(Object result) {
-                                LogUtils.d("当前线程是否是主线程："+ThreadUtils.isMainThread());
-                                ToastUtils.showShort((String)result);
-                            }
-                        });*/
                         break;
                     case 5:
-                        //ToastUtils.showShort(getRndStr(5));
                         break;
                     case 6:
-                        /*Code a = new Code();*/
                     case 7:
                     case 8:
                     case 14:
@@ -279,7 +255,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    @Override
+   /* @Override
     public void onClick(View v) {
         StringBuilder sb = new StringBuilder();
         String menu = ResourceUtils.readAssets2String("temp.json","UTF-8");
@@ -299,7 +275,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     @Override
     public void onStop() {
