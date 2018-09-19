@@ -4,15 +4,15 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    android:padding="15dp"
+    android:padding="5dp"
     android:id="@+id/ll_item"
     xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
         android:id="@+id/iv_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/round_bg"/>
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/fwrx"/>
 
     <TextView
         android:id="@+id/tv_function"

@@ -1,17 +1,14 @@
 package com.lgw.activity;
-import android.os.Bundle;
-import android.util.Log;
+
 import android.widget.ImageView;
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.LogUtils;
-import com.jude.beam.bijection.BeamAppCompatActivity;
+import com.jaeger.library.StatusBarUtil;
 import com.jude.beam.bijection.RequiresPresenter;
 import com.lgw.R;
 import com.lgw.base.NewBaseActivity;
 import com.lgw.presenter.NewSplashPresenter;
-import com.tencent.android.tpush.XGIOperateCallback;
 import com.tencent.android.tpush.XGPushConfig;
-import com.tencent.android.tpush.XGPushManager;
 
 @RequiresPresenter(NewSplashPresenter.class)
 public class NewSplashActivity extends NewBaseActivity<NewSplashPresenter> {
@@ -25,6 +22,7 @@ public class NewSplashActivity extends NewBaseActivity<NewSplashPresenter> {
 
     @Override
     public void initView() {
+        StatusBarUtil.setTranslucent(this,39);
         mIv_ad = findViewById(R.id.iv_ad);
     }
 

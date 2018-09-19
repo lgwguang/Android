@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,6 +37,7 @@ import com.lgw.activity.MainActivity;
 import com.lgw.activity.NewMainActivity;
 import com.lgw.activity.SchameFilterActivity;
 import com.lgw.activity.TextActivity;
+import com.lgw.adapter.HomeAdapter;
 import com.lgw.adapter.MenuAdapter;
 import com.lgw.base.BaseApplication;
 import com.lgw.bean.Ad;
@@ -64,7 +67,7 @@ import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 public class HomeFragment extends Fragment implements AppBarLayout.OnOffsetChangedListener {
 
-    private GridView gv;
+    /*private GridView gv;*/
 
     private Context mContext;
     private String TAG = "HomeFragment";
@@ -77,6 +80,8 @@ public class HomeFragment extends Fragment implements AppBarLayout.OnOffsetChang
     Toolbar toolbar;
     AppBarLayout appbarlayout;
     RelativeLayout rl_show,rl_hide;
+    RecyclerView recyclerview;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -98,14 +103,15 @@ public class HomeFragment extends Fragment implements AppBarLayout.OnOffsetChang
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         banner = view.findViewById(R.id.banner);
-        gv = view.findViewById(R.id.gv);
+        /*gv = view.findViewById(R.id.gv);*/
         collapsingToolbarLayout = view.findViewById(R.id.collapsingtoolbarlayout);
         toolbar = view.findViewById(R.id.toolbar);
         appbarlayout = view.findViewById(R.id.appbarlayout);
         rl_show = view.findViewById(R.id.rl_show);
         rl_hide = view.findViewById(R.id.rl_hide);
+        recyclerview = view.findViewById(R.id.recyclerview);
 
-
+        recyclerview.setLayoutManager(new GridLayoutManager(mContext,4));
         appbarlayout.addOnOffsetChangedListener(this);
         banner.setImageLoader(new GlideImageLoader());
         banner.setBannerStyle(BannerConfig.NUM_INDICATOR_TITLE);
@@ -165,11 +171,15 @@ public class HomeFragment extends Fragment implements AppBarLayout.OnOffsetChang
         String menu = ResourceUtils.readAssets2String("menudata.json","UTF-8");
         try {
             JSONObject jsonObject = new JSONObject(menu);
-            JSONArray jsonArray = jsonObject.optJSONArray("HomeDisplayList");
+            JSONArray jsonArray = jsonObject.optJSONArray("MoreDisplayList");
             ArrayList<MenuItem> listData = new Gson().fromJson(jsonArray.toString(), new TypeToken<ArrayList<MenuItem>>() {
             }.getType());
-            MenuAdapter homeAdapter = new MenuAdapter(mContext,listData);
-            gv.setAdapter(homeAdapter);
+            //MenuAdapter homeAdapter = new MenuAdapter(mContext,listData);
+            HomeAdapter homeAdapter = new HomeAdapter(listData);
+            //gv.setAdapter(homeAdapter);
+//            recyclerview.setAdapter();
+
+            recyclerview.setAdapter(homeAdapter);
             homeAdapter.setGridViewItemListener((position, o) -> {
                 switch (position) {
                     case 0:

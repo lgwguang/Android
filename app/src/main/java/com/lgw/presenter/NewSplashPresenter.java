@@ -5,6 +5,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.jude.beam.bijection.Presenter;
+import com.lgw.R;
 import com.lgw.Utils.RxUtil;
 import com.lgw.activity.NewSplashActivity;
 import java.util.concurrent.TimeUnit;
@@ -22,8 +23,7 @@ public class NewSplashPresenter extends Presenter<NewSplashActivity> {
     protected void onCreateView(@NonNull NewSplashActivity view) {
         super.onCreateView(view);
         ImageView imageView = getView().getmIv_ad();
-
-        Glide.with(getView()).load("https://b-ssl.duitang.com/uploads/item/201407/27/20140727021216_tPYdL.jpeg").into(imageView);
+        Glide.with(getView()).load(R.drawable.guide_03).into(imageView);
         imageView.animate().scaleX(1.12f).scaleY(1.12f).setDuration(2000).start();
 
         rxSubscription = Observable.timer(COUNT_DOWN_TIME, TimeUnit.MILLISECONDS)
