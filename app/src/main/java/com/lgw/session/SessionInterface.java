@@ -49,7 +49,9 @@ public class SessionInterface {
             isClickMenu = true;
             menuParams = item;
             ToastUtils.showShort("请登录");
-            mContext.startActivity(new Intent(mContext, LoginActivity.class));
+            Intent intent = new Intent(mContext, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mContext.startActivity(intent);
             return;
         }
         try {

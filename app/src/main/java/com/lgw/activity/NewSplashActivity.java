@@ -28,9 +28,10 @@ public class NewSplashActivity extends NewBaseActivity<NewSplashPresenter> {
 
     @Override
     public void initListener() {
-        XGPushConfig.enableDebug(this, true);
-        String token = XGPushConfig.getToken(this);
-        LogUtils.i("token:"+token);
+//        暂时有内存泄漏
+//        XGPushConfig.enableDebug(this, true);
+//        String token = XGPushConfig.getToken(this);
+//        LogUtils.i("token:"+token);
     }
 
     public ImageView getmIv_ad() {
@@ -46,5 +47,6 @@ public class NewSplashActivity extends NewBaseActivity<NewSplashPresenter> {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mIv_ad = null;
     }
 }

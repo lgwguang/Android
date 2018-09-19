@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ResourceUtils;
@@ -63,6 +64,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.listener.ResponseErrorListener;
 
 
 public class HomeFragment extends Fragment implements AppBarLayout.OnOffsetChangedListener {
@@ -184,24 +186,30 @@ public class HomeFragment extends Fragment implements AppBarLayout.OnOffsetChang
                 switch (position) {
                     case 0:
 //                        showEditDialog();
-                        PermissionUtil.externalStorage(new PermissionUtil.RequestPermission() {
+                        PermissionUtil.callPhone(new PermissionUtil.RequestPermission() {
                             @Override
                             public void onRequestPermissionSuccess() {
-
+                                ToastUtils.showShort("权限请求成功");
+                                EventBus.getDefault().post("z这是fragment传递过去的");
+                                startActivity(new Intent(mContext,TextActivity.class));
                             }
 
                             @Override
                             public void onRequestPermissionFailure(List<String> permissions) {
-
+                                ToastUtils.showShort("权限请求失败");
                             }
 
                             @Override
                             public void onRequestPermissionFailureWithAskNeverAgain(List<String> permissions) {
-
+                                ToastUtils.showShort("权限请求失败并且不再询问");
                             }
-                        },new RxPermissions(HomeFragment.this),RxErrorHandler.builder().with(mContext).build());
-                        EventBus.getDefault().post("z这是fragment传递过去的");
-                        startActivity(new Intent(mContext,TextActivity.class));
+                        },new RxPermissions(HomeFragment.this),RxErrorHandler.builder().with(mContext).responseErrorListener(new ResponseErrorListener() {
+                            @Override
+                            public void handleResponseError(Context context, Throwable t) {
+                                t.printStackTrace();
+                            }
+                        }).build());
+
                         break;
                     case 1:
                         String str  = Base64Util.base64EncodeStr("北京你好啊  今天是2017年");

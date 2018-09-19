@@ -29,9 +29,6 @@ public abstract class NewBaseActivity<PresenterType extends Presenter> extends B
         initView();
         initListener();
         initData();
-        if(!NetworkUtils.isConnected()){
-            ToastUtils.showShort("请检查网络是否连接");
-        }
         sessionInterface = sessionInterface==null?new SessionInterface(this):sessionInterface;
     }
 
