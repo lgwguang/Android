@@ -69,20 +69,18 @@ import me.jessyan.rxerrorhandler.handler.listener.ResponseErrorListener;
 
 public class HomeFragment extends Fragment implements AppBarLayout.OnOffsetChangedListener {
 
-    /*private GridView gv;*/
-
     private Context mContext;
     private String TAG = "HomeFragment";
     private SessionInterface sessionInterface;
-    private Banner banner;
-    private TextView btn;
-    private List<String> images = new ArrayList<>();
-    private List<String> titles = new ArrayList<>();
-    CollapsingToolbarLayout collapsingToolbarLayout;
-    Toolbar toolbar;
+
+    Banner banner;
     AppBarLayout appbarlayout;
     RelativeLayout rl_show,rl_hide;
     RecyclerView recyclerview;
+
+    private List<String> images = new ArrayList<>();
+    private List<String> titles = new ArrayList<>();
+
 
     @Override
     public void onAttach(Context context) {
@@ -105,19 +103,10 @@ public class HomeFragment extends Fragment implements AppBarLayout.OnOffsetChang
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         banner = view.findViewById(R.id.banner);
-        /*gv = view.findViewById(R.id.gv);*/
-        collapsingToolbarLayout = view.findViewById(R.id.collapsingtoolbarlayout);
-        toolbar = view.findViewById(R.id.toolbar);
         appbarlayout = view.findViewById(R.id.appbarlayout);
         rl_show = view.findViewById(R.id.rl_show);
         rl_hide = view.findViewById(R.id.rl_hide);
         recyclerview = view.findViewById(R.id.recyclerview);
-
-        recyclerview.setLayoutManager(new GridLayoutManager(mContext,4));
-        appbarlayout.addOnOffsetChangedListener(this);
-        banner.setImageLoader(new GlideImageLoader());
-        banner.setBannerStyle(BannerConfig.NUM_INDICATOR_TITLE);
-        ((NewMainActivity)mContext).initStatuBar();
         initView();
         return view;
     }
@@ -125,7 +114,6 @@ public class HomeFragment extends Fragment implements AppBarLayout.OnOffsetChang
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MessageEvent event) {
         ToastUtils.showShort(event.data);
-        btn.setText(event.data);
     }
 
 
@@ -169,6 +157,11 @@ public class HomeFragment extends Fragment implements AppBarLayout.OnOffsetChang
 
     private void initView() {
         EventBus.getDefault().register(this);
+        recyclerview.setLayoutManager(new GridLayoutManager(mContext,4));
+        appbarlayout.addOnOffsetChangedListener(this);
+        banner.setImageLoader(new GlideImageLoader());
+        banner.setBannerStyle(BannerConfig.NUM_INDICATOR_TITLE);
+        ((NewMainActivity)mContext).initStatuBar();
         sessionInterface = new SessionInterface(mContext);
         String menu = ResourceUtils.readAssets2String("menudata.json","UTF-8");
         try {
@@ -176,11 +169,7 @@ public class HomeFragment extends Fragment implements AppBarLayout.OnOffsetChang
             JSONArray jsonArray = jsonObject.optJSONArray("MoreDisplayList");
             ArrayList<MenuItem> listData = new Gson().fromJson(jsonArray.toString(), new TypeToken<ArrayList<MenuItem>>() {
             }.getType());
-            //MenuAdapter homeAdapter = new MenuAdapter(mContext,listData);
             HomeAdapter homeAdapter = new HomeAdapter(listData);
-            //gv.setAdapter(homeAdapter);
-//            recyclerview.setAdapter();
-
             recyclerview.setAdapter(homeAdapter);
             homeAdapter.setGridViewItemListener((position, o) -> {
                 switch (position) {
@@ -190,7 +179,7 @@ public class HomeFragment extends Fragment implements AppBarLayout.OnOffsetChang
                             @Override
                             public void onRequestPermissionSuccess() {
                                 ToastUtils.showShort("权限请求成功");
-                                EventBus.getDefault().post("z这是fragment传递过去的");
+                                EventBus.getDefault().postSticky("z这是fragment传递过去的");
                                 startActivity(new Intent(mContext,TextActivity.class));
                             }
 
