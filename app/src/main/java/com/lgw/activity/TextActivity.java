@@ -42,7 +42,7 @@ public class TextActivity extends AppCompatActivity {
         });
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
     public void onMessageEvent(String event){
         tv.setText(event);
     }
@@ -50,6 +50,7 @@ public class TextActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().removeStickyEvent(String.class);
         EventBus.getDefault().unregister(this);
     }
 

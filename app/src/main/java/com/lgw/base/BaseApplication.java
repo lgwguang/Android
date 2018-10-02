@@ -15,6 +15,8 @@ import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
 import com.lzy.okgo.model.HttpHeaders;
 import com.lzy.okgo.model.HttpParams;
 import com.squareup.leakcanary.LeakCanary;
+import com.tencent.android.tpush.XGPushConfig;
+import com.tencent.android.tpush.XGPushManager;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -47,10 +49,12 @@ public class BaseApplication extends MultiDexApplication {
         HttpParams params = new HttpParams();
         params.put("os", "Android");
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        HttpLoggingInterceptor loggingInterceptor =new  HttpLoggingInterceptor("日志");
-        loggingInterceptor.setPrintLevel(HttpLoggingInterceptor.Level.BODY);
-        loggingInterceptor.setColorLevel(Level.INFO);
-        builder.addInterceptor(loggingInterceptor);
+        if(BuildConfig.DEBUG){
+            HttpLoggingInterceptor loggingInterceptor =new  HttpLoggingInterceptor("日志");
+            loggingInterceptor.setPrintLevel(HttpLoggingInterceptor.Level.BODY);
+            loggingInterceptor.setColorLevel(Level.INFO);
+            builder.addInterceptor(loggingInterceptor);
+        }
         builder.readTimeout(OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
         builder.writeTimeout(OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
         builder.connectTimeout(OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);

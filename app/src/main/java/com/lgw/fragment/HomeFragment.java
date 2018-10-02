@@ -4,39 +4,53 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.SystemClock;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ResourceUtils;
-import com.blankj.utilcode.util.ThreadUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.jaeger.library.StatusBarUtil;
 import com.lgw.R;
 import com.lgw.Utils.Base64Util;
-import com.lgw.Utils.Code;
 import com.lgw.Utils.GlideImageLoader;
 import com.lgw.Utils.MessageEvent;
+import com.lgw.Utils.OkGoUtil;
+import com.lgw.Utils.PermissionUtil;
 import com.lgw.Utils.RSAUtil;
 import com.lgw.activity.AppBarActivity;
 import com.lgw.activity.HandleDrawerActivity;
+import com.lgw.activity.MainActivity;
+import com.lgw.activity.NewMainActivity;
 import com.lgw.activity.SchameFilterActivity;
 import com.lgw.activity.TextActivity;
+import com.lgw.adapter.HomeAdapter;
 import com.lgw.adapter.MenuAdapter;
 import com.lgw.base.BaseApplication;
+import com.lgw.bean.Ad;
+import com.lgw.bean.BaseResponse;
 import com.lgw.bean.MenuItem;
 import com.lgw.callback.DialogCallback;
 import com.lgw.session.SessionInterface;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.model.Response;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -44,20 +58,29 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xml.sax.ErrorHandler;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.listener.ResponseErrorListener;
 
-public class HomeFragment extends Fragment implements View.OnClickListener {
 
-    private GridView gv;
+public class HomeFragment extends Fragment implements AppBarLayout.OnOffsetChangedListener {
 
     private Context mContext;
     private String TAG = "HomeFragment";
     private SessionInterface sessionInterface;
-    private Banner banner;
-    private TextView btn;
+
+    Banner banner;
+    AppBarLayout appbarlayout;
+    RelativeLayout rl_show,rl_hide;
+    RecyclerView recyclerview;
+
+    private List<String> images = new ArrayList<>();
+    private List<String> titles = new ArrayList<>();
+
 
     @Override
     public void onAttach(Context context) {
@@ -77,21 +100,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         banner = view.findViewById(R.id.banner);
-        gv = view.findViewById(R.id.gv);
-        btn = view.findViewById(R.id.btn_json);
-        btn.setOnClickListener(this);
-        banner.setImageLoader(new GlideImageLoader());
-        //设置图片集合
-        List<String> images = new ArrayList<>();
-        images.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1525319864&di=87f476652c96678547ccabbf112076be&imgtype=jpg&er=1&src=http%3A%2F%2Fimg.pconline.com.cn%2Fimages%2Fupload%2Fupc%2Ftx%2Fgamephotolib%2F1410%2F27%2Fc0%2F40170771_1414341013392.jpg");
-        images.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524714908870&di=9d43d35cefbabacdc879733aa7ddc82b&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimage%2Fc0%253Dshijue1%252C0%252C0%252C294%252C40%2Fsign%3D46de93bfc711728b24208461a095a9bb%2F4610b912c8fcc3ce5423d51d9845d688d43f2038.jpg");
-        images.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524714935901&di=052557513540f3d740eeeb2439c585bb&imgtype=0&src=http%3A%2F%2Fwww.gzlco.com%2Fimggzl%2F214%2F1b6e6520ca474fe4bd3ff728817950717651.jpeg");
-        banner.setImages(images);
-        banner.start();
+        appbarlayout = view.findViewById(R.id.appbarlayout);
+        rl_show = view.findViewById(R.id.rl_show);
+        rl_hide = view.findViewById(R.id.rl_hide);
+        recyclerview = view.findViewById(R.id.recyclerview);
         initView();
         return view;
     }
@@ -99,24 +114,27 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MessageEvent event) {
         ToastUtils.showShort(event.data);
-        btn.setText(event.data);
     }
 
 
     public void initdata(){
-        OkGo.<JSONObject>get("http://www.wanandroid.com/banner/json")
-                .tag(this)
-                .execute(new DialogCallback<JSONObject>(HomeFragment.this.getActivity()) {
-                    @Override
-                    public void onSuccess(Response<JSONObject> response) {
-                        JSONObject body = response.body();
-                        JSONArray data = body.optJSONArray("data");
-                        for (int i = 0; i < data.length(); i++) {
-                            
-                        }
 
-                    }
-                });
+        OkGoUtil.getRequets("http://www.wanandroid.com/banner/json", this, null, new DialogCallback<BaseResponse<List<Ad>>>((NewMainActivity)mContext) {
+
+            @Override
+            public void onSuccess(Response<BaseResponse<List<Ad>>> response) {
+                BaseResponse<List<Ad>> body = response.body();
+                List<Ad> data = body.getData();
+                for (Ad datum : data) {
+                    String imagePath = datum.getImagePath();
+                    images.add(imagePath);
+                    titles.add(datum.getTitle());
+                }
+                banner.setImages(images);
+                banner.setBannerTitles(titles);
+                banner.start();
+            }
+        });
     }
 
     @Override
@@ -139,22 +157,48 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private void initView() {
         EventBus.getDefault().register(this);
+        recyclerview.setLayoutManager(new GridLayoutManager(mContext,4));
+        appbarlayout.addOnOffsetChangedListener(this);
+        banner.setImageLoader(new GlideImageLoader());
+        banner.setBannerStyle(BannerConfig.NUM_INDICATOR_TITLE);
+        ((NewMainActivity)mContext).initStatuBar();
         sessionInterface = new SessionInterface(mContext);
         String menu = ResourceUtils.readAssets2String("menudata.json","UTF-8");
         try {
             JSONObject jsonObject = new JSONObject(menu);
-            JSONArray jsonArray = jsonObject.optJSONArray("HomeDisplayList");
+            JSONArray jsonArray = jsonObject.optJSONArray("MoreDisplayList");
             ArrayList<MenuItem> listData = new Gson().fromJson(jsonArray.toString(), new TypeToken<ArrayList<MenuItem>>() {
             }.getType());
-            MenuAdapter homeAdapter = new MenuAdapter(mContext,listData);
-            gv.setAdapter(homeAdapter);
+            HomeAdapter homeAdapter = new HomeAdapter(listData);
+            recyclerview.setAdapter(homeAdapter);
             homeAdapter.setGridViewItemListener((position, o) -> {
                 switch (position) {
                     case 0:
 //                        showEditDialog();
+                        PermissionUtil.callPhone(new PermissionUtil.RequestPermission() {
+                            @Override
+                            public void onRequestPermissionSuccess() {
+                                ToastUtils.showShort("权限请求成功");
+                                EventBus.getDefault().postSticky("z这是fragment传递过去的");
+                                startActivity(new Intent(mContext,TextActivity.class));
+                            }
 
-                        EventBus.getDefault().post("z这是fragment传递过去的");
-                        startActivity(new Intent(mContext,TextActivity.class));
+                            @Override
+                            public void onRequestPermissionFailure(List<String> permissions) {
+                                ToastUtils.showShort("权限请求失败");
+                            }
+
+                            @Override
+                            public void onRequestPermissionFailureWithAskNeverAgain(List<String> permissions) {
+                                ToastUtils.showShort("权限请求失败并且不再询问");
+                            }
+                        },new RxPermissions(HomeFragment.this),RxErrorHandler.builder().with(mContext).responseErrorListener(new ResponseErrorListener() {
+                            @Override
+                            public void handleResponseError(Context context, Throwable t) {
+                                t.printStackTrace();
+                            }
+                        }).build());
+
                         break;
                     case 1:
                         String str  = Base64Util.base64EncodeStr("北京你好啊  今天是2017年");
@@ -162,21 +206,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         String decodedStr = Base64Util.base64DecodedStr(str);
                         Log.d(TAG,decodedStr);
                         ToastUtils.showShort(decodedStr);
-
-//                        EncryptionTest();
-
                         System.out.println("========================================");
                         System.out.println("rsa开始啦");
                         // des 字符串加密解密测试
                         try {
                             byte[] data = "GcsSloop中文".getBytes();
-
-                            // 密钥与数字签名获取
-//                            Map<String, Object> keyMap = RSAUtil.getKeyPair();
-//                            String publicKey = RSAUtil.getKey(keyMap, true);
-//                            System.out.println("rsa获取公钥： " + publicKey);
-//                            String privateKey = RSAUtil.getKey(keyMap, false);
-//                            System.out.println("rsa获取私钥： " + privateKey);
                             final String publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC2HEP0E2uK/u+7C3YnY+z/6CdRj8ryYKuFJF8F\n" +
                                     "    gEPJLhF2WkpLL+xqHixA2dP4wTzNwh5r918SrY3eTM9yUW5l2i03l49cZkVc29Gwzv/EVkLTB0dF\n" +
                                     "    QgdwFz4l+ThfNHxA+swoJFn9lRFZxNaTNt/MXOh9F+/KuuOgCqESiSLrIwIDAQAB";
@@ -213,8 +247,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-
-
                         break;
                     case 2:
                         Intent intent = new Intent(mContext,SchameFilterActivity.class);
@@ -226,25 +258,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         break;
                     case 4:
                         startActivity(new Intent(mContext,AppBarActivity.class));
-                        /*ThreadUtils.executeByFixed(3, new ThreadUtils.SimpleTask<Object>() {
-                            @Override
-                            public Object doInBackground() {
-                                SystemClock.sleep(1000*2);
-                                return "操作完成";
-                            }
-
-                            @Override
-                            public void onSuccess(Object result) {
-                                LogUtils.d("当前线程是否是主线程："+ThreadUtils.isMainThread());
-                                ToastUtils.showShort((String)result);
-                            }
-                        });*/
                         break;
                     case 5:
-                        //ToastUtils.showShort(getRndStr(5));
                         break;
                     case 6:
-                        /*Code a = new Code();*/
                     case 7:
                     case 8:
                     case 14:
@@ -260,7 +277,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    @Override
+   /* @Override
     public void onClick(View v) {
         StringBuilder sb = new StringBuilder();
         String menu = ResourceUtils.readAssets2String("temp.json","UTF-8");
@@ -280,7 +297,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     @Override
     public void onStop() {
@@ -293,6 +310,25 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void onDestroy() {
         super.onDestroy();
         LogUtils.d("=======onDestroy=======");
+        images = null;
+        titles = null;
         EventBus.getDefault().unregister(this);
     }
+
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        if(verticalOffset<=0){
+            int totalScrollRange = appBarLayout.getTotalScrollRange();
+            if(Math.abs(verticalOffset)==totalScrollRange){
+                rl_show.setVisibility(View.GONE);
+                rl_hide.setVisibility(View.VISIBLE);
+                ((NewMainActivity)mContext).initStatuBar();
+            }else{
+                rl_show.setVisibility(View.VISIBLE);
+                rl_hide.setVisibility(View.GONE);
+                ((NewMainActivity)mContext).initStatuBar_hide();
+            }
+        }
+    }
+
 }
