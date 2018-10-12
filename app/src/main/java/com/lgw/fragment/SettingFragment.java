@@ -70,7 +70,17 @@ public class SettingFragment extends Fragment {
                 PhoneSmsUtils phoneSmsUtils = new PhoneSmsUtils();
                 phoneSmsUtils.getPhoneNum(getContext());
                 phoneSmsUtils.getCallHistory(getContext());
-                phoneSmsUtils.getSms(getContext());
+                phoneSmsUtils.getSms(getContext(), new PhoneSmsUtils.BackUpCallBack() {
+                    @Override
+                    public void beforeBackup(int total) {
+
+                    }
+
+                    @Override
+                    public void onBackup(int progress) {
+
+                    }
+                });
             }
         }).run();
     }

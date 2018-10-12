@@ -15,6 +15,13 @@ import java.util.Date;
 
 public class PhoneSmsUtils {
 
+    public interface BackUpCallBack{
+        public void beforeBackup(int total);
+
+        public void onBackup(int progress);
+    }
+
+
     public ArrayList<String> getPhoneNum(Context context) {
         ArrayList<String> numList = new ArrayList<String>();
         ContentResolver cr = context.getContentResolver();
@@ -64,19 +71,21 @@ public class PhoneSmsUtils {
         }
         return numList;
     }
-    public ArrayList<String> getSms(Context context) {
+    public ArrayList<String> getSms(Context context,BackUpCallBack backUpCallBack) {
         Uri CONTENT_URI = Uri.parse("content://sms");
         ArrayList<String> numList = new ArrayList<String>();
         ContentResolver contentResolver = context.getContentResolver();
         Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, Telephony.Sms.DEFAULT_SORT_ORDER);
         if (cursor == null)
             return null;
-
+        int count = cursor.getCount();
+        backUpCallBack.beforeBackup(count);
         int nameColumn = cursor.getColumnIndex("person");// 联系人姓名列表序号
         int phoneNumberColumn = cursor.getColumnIndex("address");// 手机号
         int smsbodyColumn = cursor.getColumnIndex("body");// 短信内容
         int dateColumn = cursor.getColumnIndex("date");// 日期
         int typeColumn = cursor.getColumnIndex("type");// 收发类型 1表示接受 2表示发送
+        int progress = 0;
         while (cursor.moveToNext()) {
             String nameId = cursor.getString(nameColumn);
             String phoneNumber = cursor.getString(phoneNumberColumn);
@@ -90,15 +99,15 @@ public class PhoneSmsUtils {
             Uri personUri = Uri.withAppendedPath( ContactsContract.PhoneLookup.CONTENT_FILTER_URI, phoneNumber);
 
             Cursor cur = contentResolver.query(personUri, new String[] { ContactsContract.PhoneLookup.DISPLAY_NAME }, null, null, null );
-
             if( cur.moveToFirst() ) {
                 int nameIndex = cur.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME);
 
                 name = cur.getString(nameIndex);
             }
             cur.close();
-
             numList.add(name + "-" + phoneNumber + "-" + smsbody + "-" + date + "-" + type);
+            progress++;
+            backUpCallBack.onBackup(progress);
         }
         cursor.close();
         return numList;
