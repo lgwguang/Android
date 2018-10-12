@@ -1,5 +1,7 @@
 package com.lgw.model;
 
+import com.lgw.bean.UserBean;
+
 public interface UserModel {
 
     void setSid(int cid);
