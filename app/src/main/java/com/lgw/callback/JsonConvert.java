@@ -59,10 +59,6 @@ public class JsonConvert<T> implements Converter<T> {
     @Override
     public T convertResponse(Response response) throws Throwable {
 
-        // 重要的事情说三遍，不同的业务，这里的代码逻辑都不一样，如果你不修改，那么基本不可用
-
-        // 如果你对这里的代码原理不清楚，可以看这里的详细原理说明: https://github.com/jeasonlzy/okhttp-OkGo/wiki/JsonCallback
-
         if (type == null) {
             if (clazz == null) {
                 // 如果没有通过构造函数传进来，就自动解析父类泛型的真实类型（有局限性，继承后就无法解析到）
