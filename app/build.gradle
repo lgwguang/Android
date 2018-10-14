@@ -34,15 +34,6 @@ android {
             }
         }
         multiDexEnabled true
-        //armeabi-v7a, arm64-v8a, x86, x86_64
-        ndk {
-            abiFilters 'x86', 'armeabi-v7a', 'arm64-v8a'
-        }
-
-        manifestPlaceholders = [
-                XG_ACCESS_ID:"2100310757",
-                XG_ACCESS_KEY : "A56V184DCYCF",
-        ]
     }
     buildTypes {
         release {
@@ -89,13 +80,13 @@ dependencies {
     implementation 'com.lzy.net:okrx2:2.0.2'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
     implementation 'com.readystatesoftware.chuck:library:1.0.4'
-    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-5'
     implementation 'com.jaeger.statusbarutil:library:1.5.1'
     implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
     implementation 'me.jessyan:rxerrorhandler:2.1.1'
     //定位功能
-    implementation 'com.amap.api:location:latest.integration'
+    implementation 'com.amap.api:location:4.2.0'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
     implementation 'joda-time:joda-time:2.3'
@@ -105,24 +96,11 @@ dependencies {
     annotationProcessor 'com.alibaba:arouter-compiler:1.1.4'
     implementation files('libs/nineoldandroids-2.4.0.jar')
     implementation 'com.github.lzyzsd:jsbridge:1.0.4'
-
     implementation 'com.youth.banner:banner:1.4.10'
     implementation 'org.greenrobot:eventbus:3.1.1'
-
-    implementation "com.google.dagger:dagger:2.14.1"
+    implementation 'com.google.dagger:dagger:2.14.1'
     annotationProcessor "com.google.dagger:dagger-compiler:2.14.1"
-
-
     implementation 'com.android.support:multidex:1.0.3'
-    implementation "com.jude:beam:3.0.1"
+    implementation 'com.jude:beam:3.0.1'
     //implementation 'me.jessyan:arms:2.4.1'
-
-    //信鸽jar
-    implementation 'com.tencent.xinge:xinge:3.2.6-release'
-    //jg包
-    implementation'com.tencent.jg:jg:1.1'
-    //wup包
-    implementation 'com.tencent.wup:wup:1.0.0.E-release'
-    //mid包
-    implementation 'com.tencent.mid:mid:4.0.6-release'
 }
