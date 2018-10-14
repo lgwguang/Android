@@ -1,5 +1,7 @@
 package com.lgw.model;
 
+import com.lgw.bean.UserBean;
+
 public class UserModelimpl implements UserModel{
     @Override
     public void setSid(int cid) {

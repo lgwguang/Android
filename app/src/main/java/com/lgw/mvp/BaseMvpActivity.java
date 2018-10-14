@@ -2,6 +2,8 @@ package com.lgw.mvp;
 
 import android.os.Bundle;
 
+import com.lgw.base.BaseActivity;
+
 public abstract class BaseMvpActivity <P extends MvpPresenter> extends BaseActivity implements MvpView{
 
     protected P presenter;
