@@ -5,26 +5,19 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ResourceUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.jaeger.library.StatusBarUtil;
 import com.lgw.R;
 import com.lgw.Utils.Base64Util;
 import com.lgw.Utils.GlideImageLoader;
@@ -34,19 +27,16 @@ import com.lgw.Utils.PermissionUtil;
 import com.lgw.Utils.RSAUtil;
 import com.lgw.activity.AppBarActivity;
 import com.lgw.activity.HandleDrawerActivity;
-import com.lgw.activity.MainActivity;
 import com.lgw.activity.NewMainActivity;
 import com.lgw.activity.SchameFilterActivity;
 import com.lgw.activity.TextActivity;
 import com.lgw.adapter.HomeAdapter;
-import com.lgw.adapter.MenuAdapter;
 import com.lgw.base.BaseApplication;
 import com.lgw.bean.Ad;
 import com.lgw.bean.BaseResponse;
 import com.lgw.bean.MenuItem;
 import com.lgw.callback.DialogCallback;
 import com.lgw.session.SessionInterface;
-import com.lzy.okgo.OkGo;
 import com.lzy.okgo.model.Response;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.youth.banner.Banner;
@@ -58,7 +48,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.xml.sax.ErrorHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,8 +58,9 @@ import me.jessyan.rxerrorhandler.handler.listener.ResponseErrorListener;
 
 public class HomeFragment extends Fragment implements AppBarLayout.OnOffsetChangedListener {
 
+    private static final String TAG = "HomeFragment";
+
     private Context mContext;
-    private String TAG = "HomeFragment";
     private SessionInterface sessionInterface;
 
     Banner banner;
@@ -81,6 +71,18 @@ public class HomeFragment extends Fragment implements AppBarLayout.OnOffsetChang
     private List<String> images = new ArrayList<>();
     private List<String> titles = new ArrayList<>();
 
+    private static HomeFragment homeFragment;
+
+    public static HomeFragment getInstance(){
+        if(homeFragment == null){
+            synchronized(HomeFragment.class){
+                if(homeFragment == null){
+                    homeFragment = new HomeFragment();
+                }
+            }
+        }
+        return homeFragment;
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -88,11 +90,6 @@ public class HomeFragment extends Fragment implements AppBarLayout.OnOffsetChang
         mContext = getActivity();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
