@@ -2,13 +2,11 @@ package com.lgw.activity;
 
 import android.widget.ImageView;
 import com.blankj.utilcode.util.ActivityUtils;
-import com.blankj.utilcode.util.LogUtils;
 import com.jaeger.library.StatusBarUtil;
 import com.jude.beam.bijection.RequiresPresenter;
 import com.lgw.R;
 import com.lgw.base.NewBaseActivity;
 import com.lgw.presenter.NewSplashPresenter;
-import com.tencent.android.tpush.XGPushConfig;
 
 @RequiresPresenter(NewSplashPresenter.class)
 public class NewSplashActivity extends NewBaseActivity<NewSplashPresenter> {
@@ -28,10 +26,7 @@ public class NewSplashActivity extends NewBaseActivity<NewSplashPresenter> {
 
     @Override
     public void initListener() {
-//        暂时有内存泄漏
-//        XGPushConfig.enableDebug(this, true);
-//        String token = XGPushConfig.getToken(this);
-//        LogUtils.i("token:"+token);
+
     }
 
     public ImageView getmIv_ad() {
