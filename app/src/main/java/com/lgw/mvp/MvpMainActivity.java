@@ -1,5 +1,4 @@
 package com.lgw.mvp;
-
 import com.lgw.R;
 
 public class MvpMainActivity extends BaseMvpActivity<MainContract.IMainPresenter> implements MainContract.IMainView {
@@ -28,4 +27,6 @@ public class MvpMainActivity extends BaseMvpActivity<MainContract.IMainPresenter
     public void setTestContent() {
 
     }
+
+
 }

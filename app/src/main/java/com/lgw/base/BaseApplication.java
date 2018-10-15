@@ -1,5 +1,6 @@
 package com.lgw.base;
 
+import android.content.Context;
 import android.support.multidex.MultiDexApplication;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.blankj.utilcode.util.LogUtils;
@@ -29,10 +30,17 @@ public class BaseApplication extends MultiDexApplication {
     public static HashMap<String, String> AuthorityList = new HashMap<>();
     public static boolean isLogin = false;
 
+    public static Context mContext;
+
     @Override
     public void onCreate() {
         super.onCreate();
+        mContext = this;
         init();
+    }
+
+    public static Context getContext(){
+        return mContext;
     }
 
     private void init(){
@@ -75,7 +83,6 @@ public class BaseApplication extends MultiDexApplication {
             return;
         }
         LeakCanary.install(this);
-
         CrashHandler.getInstance().init(getApplicationContext());
     }
 }
