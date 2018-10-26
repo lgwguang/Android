@@ -34,6 +34,7 @@ import com.lgw.Utils.MessageEvent;
 import com.lgw.Utils.OkGoUtil;
 import com.lgw.Utils.PermissionUtil;
 import com.lgw.Utils.RSAUtil;
+import com.lgw.Utils.RxPermissionUtil;
 import com.lgw.activity.AppBarActivity;
 import com.lgw.activity.HandleDrawerActivity;
 import com.lgw.activity.MainActivity;
