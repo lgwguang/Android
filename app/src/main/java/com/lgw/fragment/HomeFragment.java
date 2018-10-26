@@ -72,8 +72,9 @@ import me.jessyan.rxerrorhandler.handler.listener.ResponseErrorListener;
 
 public class HomeFragment extends Fragment implements AppBarLayout.OnOffsetChangedListener {
 
+    private static final String TAG = "HomeFragment";
+
     private Context mContext;
-    private String TAG = "HomeFragment";
     private SessionInterface sessionInterface;
 
     Banner banner;
@@ -91,6 +92,18 @@ public class HomeFragment extends Fragment implements AppBarLayout.OnOffsetChang
         }
     };
 
+    private static HomeFragment homeFragment;
+
+    public static HomeFragment getInstance(){
+        if(homeFragment == null){
+            synchronized(HomeFragment.class){
+                if(homeFragment == null){
+                    homeFragment = new HomeFragment();
+                }
+            }
+        }
+        return homeFragment;
+    }
 
     @Override
     public void onAttach(Context context) {

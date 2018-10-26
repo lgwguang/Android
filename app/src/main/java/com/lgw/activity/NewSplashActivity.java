@@ -2,7 +2,6 @@ package com.lgw.activity;
 
 import android.widget.ImageView;
 import com.blankj.utilcode.util.ActivityUtils;
-import com.blankj.utilcode.util.LogUtils;
 import com.jaeger.library.StatusBarUtil;
 import com.jude.beam.bijection.RequiresPresenter;
 import com.lgw.R;
@@ -27,6 +26,7 @@ public class NewSplashActivity extends NewBaseActivity<NewSplashPresenter> {
 
     @Override
     public void initListener() {
+
     }
 
     public ImageView getmIv_ad() {

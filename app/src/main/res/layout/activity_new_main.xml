@@ -28,7 +28,8 @@
         android:gravity="center"
         android:orientation="horizontal"
         android:paddingBottom="3dp"
-        android:paddingTop="3dp">
+        android:paddingTop="3dp"
+        android:checkedButton="@id/rb_home">
 
         <RadioButton
             android:id="@+id/rb_home"
