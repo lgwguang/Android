@@ -37,6 +37,7 @@ import com.lgw.Utils.RSAUtil;
 import com.lgw.Utils.RxPermissionUtil;
 import com.lgw.activity.AppBarActivity;
 import com.lgw.activity.HandleDrawerActivity;
+import com.lgw.activity.Main2Activity;
 import com.lgw.activity.MainActivity;
 import com.lgw.activity.NewMainActivity;
 import com.lgw.activity.SchameFilterActivity;
@@ -81,7 +82,7 @@ public class HomeFragment extends Fragment implements AppBarLayout.OnOffsetChang
     AppBarLayout appbarlayout;
     RelativeLayout rl_show,rl_hide;
     RecyclerView recyclerview;
-
+    private View rootView;
     private List<String> images = new ArrayList<>();
     private List<String> titles = new ArrayList<>();
 
@@ -124,14 +125,22 @@ public class HomeFragment extends Fragment implements AppBarLayout.OnOffsetChang
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-        banner = view.findViewById(R.id.banner);
-        appbarlayout = view.findViewById(R.id.appbarlayout);
-        rl_show = view.findViewById(R.id.rl_show);
-        rl_hide = view.findViewById(R.id.rl_hide);
-        recyclerview = view.findViewById(R.id.recyclerview);
-        initView();
-        return view;
+        if(rootView==null){
+            rootView = inflater.inflate(R.layout.fragment_home, container, false);
+            banner = rootView.findViewById(R.id.banner);
+            appbarlayout = rootView.findViewById(R.id.appbarlayout);
+            rl_show = rootView.findViewById(R.id.rl_show);
+            rl_hide = rootView.findViewById(R.id.rl_hide);
+            recyclerview = rootView.findViewById(R.id.recyclerview);
+            initView();
+            ToastUtils.showShort("rootView");
+        }
+        ViewGroup parent = (ViewGroup) rootView.getParent();
+        if (parent != null) {
+            parent.removeView(rootView);
+        }
+        ToastUtils.showShort("onCreateView");
+        return rootView;
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -142,7 +151,7 @@ public class HomeFragment extends Fragment implements AppBarLayout.OnOffsetChang
 
     public void initdata(){
 
-        OkGoUtil.getRequets("http://www.wanandroid.com/banner/json", this, null, new DialogCallback<BaseResponse<List<Ad>>>((NewMainActivity)mContext) {
+        OkGoUtil.getRequets("http://www.wanandroid.com/banner/json", this, null, new DialogCallback<BaseResponse<List<Ad>>>((Main2Activity)mContext) {
 
             @Override
             public void onSuccess(Response<BaseResponse<List<Ad>>> response) {
@@ -184,7 +193,7 @@ public class HomeFragment extends Fragment implements AppBarLayout.OnOffsetChang
         appbarlayout.addOnOffsetChangedListener(this);
         banner.setImageLoader(new GlideImageLoader());
         banner.setBannerStyle(BannerConfig.NUM_INDICATOR_TITLE);
-        ((NewMainActivity)mContext).initStatuBar();
+        ((Main2Activity)mContext).initStatuBar();
         sessionInterface = new SessionInterface(mContext);
         String menu = ResourceUtils.readAssets2String("menudata.json","UTF-8");
         try {
@@ -198,7 +207,7 @@ public class HomeFragment extends Fragment implements AppBarLayout.OnOffsetChang
                 switch (position) {
                     case 0:
 //                        showEditDialog();
-                        PermissionUtil.callPhone(new PermissionUtil.RequestPermission() {
+                        PermissionUtil.externalStorage(new PermissionUtil.RequestPermission() {
                             @Override
                             public void onRequestPermissionSuccess() {
                                 ToastUtils.showShort("权限请求成功");
@@ -345,11 +354,11 @@ public class HomeFragment extends Fragment implements AppBarLayout.OnOffsetChang
             if(Math.abs(verticalOffset)==totalScrollRange){
                 rl_show.setVisibility(View.GONE);
                 rl_hide.setVisibility(View.VISIBLE);
-                ((NewMainActivity)mContext).initStatuBar();
+                ((Main2Activity)mContext).initStatuBar();
             }else{
                 rl_show.setVisibility(View.VISIBLE);
                 rl_hide.setVisibility(View.GONE);
-                ((NewMainActivity)mContext).initStatuBar_hide();
+                ((Main2Activity)mContext).initStatuBar_hide();
             }
         }
     }

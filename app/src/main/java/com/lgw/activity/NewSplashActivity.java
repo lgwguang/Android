@@ -34,7 +34,8 @@ public class NewSplashActivity extends NewBaseActivity<NewSplashPresenter> {
     }
 
     public void startMainActivity(){
-        ActivityUtils.startActivity(NewMainActivity.class);
+        //ActivityUtils.startActivity(NewMainActivity.class);
+        ActivityUtils.startActivity(Main2Activity.class);
         overridePendingTransition(R.anim.screen_zoom_out,R.anim.screen_zoom_out);
         finish();
     }

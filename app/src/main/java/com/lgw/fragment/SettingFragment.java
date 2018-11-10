@@ -24,7 +24,7 @@ public class SettingFragment extends Fragment {
         }
         return settingFragment;
     }
-
+    private View rootView;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +33,15 @@ public class SettingFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_setting, container, false);
+        //return inflater.inflate(R.layout.fragment_setting, container, false);
+        if (rootView == null){
+            rootView = inflater.inflate(R.layout.fragment_setting,container,false);
+        }
+        ViewGroup parent = (ViewGroup) rootView.getParent();
+        if (parent != null) {
+            parent.removeView(rootView);
+        }
+        return rootView;
     }
 
     @Override

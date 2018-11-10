@@ -25,10 +25,19 @@ public class MineFragment extends Fragment {
         return mineFragment;
     }
 
+    private View rootView;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_mine,container,false);
+        if (rootView == null){
+            rootView = inflater.inflate(R.layout.fragment_mine,container,false);
+        }
+        ViewGroup parent = (ViewGroup) rootView.getParent();
+        if (parent != null) {
+            parent.removeView(rootView);
+        }
+        return rootView;
     }
 
 

@@ -34,13 +34,22 @@ public class OtherFragment extends Fragment {
         }
         return otherFragment;
     }
-
+    private View rootView;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_other,container,false);
+       /* View view = inflater.inflate(R.layout.fragment_other,container,false);
         initView(view);
-        return view;
+        return view;*/
+        if (rootView == null){
+            rootView = inflater.inflate(R.layout.fragment_other,container,false);
+            initView(rootView);
+        }
+        ViewGroup parent = (ViewGroup) rootView.getParent();
+        if (parent != null) {
+            parent.removeView(rootView);
+        }
+        return rootView;
     }
 
     public void initView(View view){
