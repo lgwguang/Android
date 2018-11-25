@@ -69,6 +69,8 @@ public class OtherFragment extends Fragment {
         return rootView;
     }
 
+
+
     public void initView(View view){
         RefreshLayout refreshLayout = (RefreshLayout)view.findViewById(R.id.refreshLayout);
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
