@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.lgw.R;
 import com.lgw.Utils.Util;
-import com.lgw.bean.MenuItem;
+import com.lgw.entity.ResultBean.MenuItem;
 
 import java.util.List;
 

@@ -9,12 +9,26 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
+import com.blankj.utilcode.util.ResourceUtils;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lgw.R;
-import com.lgw.base.BaseFragment;
+import com.lgw.Utils.OkGoUtil;
+import com.lgw.activity.Main2Activity;
+import com.lgw.adapter.OtherAdapter;
+import com.lgw.bean.BaseResponse;
+import com.lgw.callback.DialogCallback;
+import com.lgw.entity.ResultBean;
+import com.lzy.okgo.model.Response;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +37,8 @@ public class OtherFragment extends Fragment {
 
 
     private static OtherFragment otherFragment;
+    private RecyclerView rv;
+    private OtherAdapter otherAdapter;
 
     public static OtherFragment getInstance(){
         if(otherFragment == null){
@@ -44,6 +60,7 @@ public class OtherFragment extends Fragment {
         if (rootView == null){
             rootView = inflater.inflate(R.layout.fragment_other,container,false);
             initView(rootView);
+            initdata();
         }
         ViewGroup parent = (ViewGroup) rootView.getParent();
         if (parent != null) {
@@ -66,63 +83,35 @@ public class OtherFragment extends Fragment {
                 refreshlayout.finishLoadMore(2000/*,false*/);//传入false表示加载失败
             }
         });
-        RecyclerView rv = view.findViewById(R.id.recyclerView);
+        rv = view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        List list = new ArrayList();
-        list.add("a");
-        list.add("b");
-        list.add("c");
-        list.add("c");
-        list.add("c");
-        list.add("c");
-        list.add("c");
-        rv.setAdapter(new OutAdapter(list));
     }
+    public void initdata(){
 
-    class OutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-        final List list;
-        public OutAdapter(List list) {
-            this.list = list;
-        }
+        OkGoUtil.getRequets("http://www.wanandroid.com/banner/json", this, null, new DialogCallback<BaseResponse<List<ResultBean.BannerInfoBean>>>((Main2Activity)getActivity()) {
 
-        @NonNull
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-            if(i==5){
-                View view = LayoutInflater.from(getContext()).inflate(R.layout.item_inner, null);
-                return new InnerHolder(view);
-            }else{
-                View view = LayoutInflater.from(getContext()).inflate(R.layout.item_out, null);
-                return new MyViewHolder(view);
+            @Override
+            public void onSuccess(Response<BaseResponse<List<ResultBean.BannerInfoBean>>> response) {
+                try {
+                    BaseResponse<List<ResultBean.BannerInfoBean>> body = response.body();
+                    List<ResultBean.BannerInfoBean> data = body.getData();
+                    for (ResultBean.BannerInfoBean datum : data) {
+                        String imagePath = datum.getImagePath();
+                    }
+                    ResultBean resultBean = new ResultBean();
+                    resultBean.setBanner_info(data);
+                    String menu = ResourceUtils.readAssets2String("menudata.json","UTF-8");
+                    JSONObject jsonObject = new JSONObject(menu);
+                    JSONArray jsonArray = jsonObject.optJSONArray("MoreDisplayList");
+                    ArrayList<ResultBean.MenuItem> listData = new Gson().fromJson(jsonArray.toString(), new TypeToken<ArrayList<ResultBean.MenuItem>>() {
+                    }.getType());
+                    resultBean.setChannel_info(listData);
+                    otherAdapter = new OtherAdapter(getContext(),resultBean);
+                    rv.setAdapter(otherAdapter);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-            ((MyViewHolder)viewHolder).tvout.setText(list.get(i).toString());
-        }
-
-
-        @Override
-        public int getItemCount() {
-            return list.size();
-        }
+        });
     }
-    class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView tvout;
-        public MyViewHolder(@NonNull View itemView) {
-            super(itemView);
-            tvout = itemView.findViewById(R.id.tv_out);
-        }
-    }
-
-    class InnerHolder extends RecyclerView.ViewHolder{
-
-        public InnerHolder(@NonNull View itemView) {
-            super(itemView);
-
-        }
-    }
-
 }

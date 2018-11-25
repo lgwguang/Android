@@ -62,11 +62,9 @@ public class Main2Activity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int arg0, int arg1, Intent arg2) {
-        // TODO Auto-generated method stub
         super.onActivityResult(arg0, arg1, arg2);
 
-        Fragment f = getSupportFragmentManager().findFragmentByTag(
-                mTabHost.getCurrentTabTag());
+        Fragment f = getSupportFragmentManager().findFragmentByTag(mTabHost.getCurrentTabTag());
 
         if (f != null && f instanceof OtherFragment) {
             f.onActivityResult(arg0, arg1, arg2);

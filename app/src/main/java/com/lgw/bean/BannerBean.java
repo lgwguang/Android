@@ -2,7 +2,7 @@ package com.lgw.bean;
 
 import java.util.List;
 
-public class Ad extends BaseResponse<List<Ad>> {
+public class BannerBean extends BaseResponse<List<BannerBean>> {
     /**
      * desc : 通过聊天机器人打造智能化工作流
      * id : 17
