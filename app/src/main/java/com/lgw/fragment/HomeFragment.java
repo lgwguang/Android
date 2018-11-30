@@ -104,7 +104,7 @@ public class HomeFragment extends Fragment implements AppBarLayout.OnOffsetChang
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initdata();
+        //initdata();
     }
 
     @Override
